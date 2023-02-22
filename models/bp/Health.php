@@ -4,10 +4,10 @@ namespace app\models\bp;
 
 use yii\db\ActiveRecord;
 
-class users extends ActiveRecord
+class Health extends  ActiveRecord
 {
     public static function tableName()
     {
-        return 'userbp';
+        return 'health_check';
     }
 }

@@ -8,6 +8,7 @@
 
 namespace app\modules\bp\controllers;
 
+use app\models\bp\Health;
 use app\models\bp\users;
 use app\models\readyplayer1\ReadyPlayer1;
 use app\models\readyplayer1\ReadyPlayer1Board;
@@ -84,15 +85,28 @@ class BpController extends Controller
         return $this->createPage('/gift', ['players' =>0]);
     }
 
-    public function actionScoreboard()
-    {
 
-        return $this->createPage('/scoreboard', ['scores' => 0]);
+
+    public function actionDailyupdate()
+    {
+        $post = Yii::$app->request->post();
+        if(isset($post['sys'])) {
+            $health = new Health();
+            $health->sys = $post['sys'];
+            $health->dia = $post['dia'];
+            $health->pul = $post['pulse'];
+            $health->step = $post['step'];
+            $health->other = $post['other'];
+            $health->datetime = $post['datesupplementary-123'].' '.$post['timesupplementary-123'];
+            $health->save();
+            $this->headerAlertMessage = "Added Reading";
+        }
+
+        return $this->createPage('/dailyupdate', ['scores' => 0]);
     }
 
     public function Login()
     {
-
         $post = Yii::$app->request->post();
         $user = users::findOne(['username' => $post['username']]);
         if ($user == false) {
@@ -102,20 +116,15 @@ class BpController extends Controller
 
                 $cookies = Yii::$app->response->cookies;
                 $cookies->readOnly = false;
-                $cookies->add(new \yii\web\Cookie([
-                    'name' => 'color',
-                    'value' => $user['color'],
-                    'expire' => time() + 86400 * 365,
-                ]));
 
                 $cookies->add(new \yii\web\Cookie([
-                    'name' => 'player',
+                    'name' => 'user',
                     'value' => $user['username'],
                     'expire' => time() + 86400 * 365,
                 ]));
 
                 $cookies->add(new \yii\web\Cookie([
-                    'name' => 'ownerId',
+                    'name' => 'id',
                     'value' => $user['id'],
                     'expire' => time() + 86400 * 365,
                 ]));
@@ -145,54 +154,47 @@ class BpController extends Controller
     public function actionSignup()
     {
         $post = Yii::$app->request->post();
-        if (isset($post['username']) && $post['username'] != '') {
-
-            $signup = Users::findOne(['username' => $post['username']]);
+        if (isset($post['newusername']) && $post['newusername'] != '') {
+            $signup = Users::findOne(['username' => $post['newusername']]);
             if ($signup != false) {
                 $this->headerAlertMessage = "Username already exists";
             } else {
-                $signup = users::findOne(['color' => $post['color']]);
-                if (strlen($post['password']) > 7) {
-                    if ($signup == false) {
-                        $cookies = Yii::$app->response->cookies;
-                        $cookies->readOnly = false;
-                        $cookies->remove('player');
-                        $cookies->remove('color');
-                        $cookies->remove('ownerId');
+                if (strlen($post['newpassword']) > 8) {
+                    $cookies = Yii::$app->response->cookies;
+                    $cookies->readOnly = false;
+                    $cookies->remove('user');
+                    $cookies->remove('ownerId');
 
-                        $signup = new users();
-                        $signup->key = $this->rand_key();
-                        $signup->username = $post['username'];
-                        $signup->realname = $post['realname'];
-                        $signup->color = $post['color'];
-                        $signup->password = password_hash($post['password'], PASSWORD_DEFAULT);
-                        $signup->save();
 
-                        $cookies->add(new \yii\web\Cookie([
-                            'name' => 'color',
-                            'value' => $signup->color,
-                            'expire' => time() + 86400 * 365,
-                        ]));
+                    $signup = new users();
+                    $signup->key = $this->rand_key();
+                    $signup->username = $post['newusername'];
+                    $signup->email = $post['newemail'];
+                    $signup->password = password_hash($post['newpassword'], PASSWORD_DEFAULT);
+                    $signup->save();
 
-                        $cookies->add(new \yii\web\Cookie([
-                            'name' => 'player',
-                            'value' => $signup->username,
-                            'expire' => time() + 86400 * 365,
-                        ]));
+                    $cookies->add(new \yii\web\Cookie([
+                        'name' => 'user',
+                        'value' => $signup->username,
+                        'expire' => time() + 86400 * 365,
+                    ]));
+                    $_SESSION['user'] = $signup->username;
 
-                        $cookies->add(new \yii\web\Cookie([
-                            'name' => 'ownerId',
-                            'value' => $signup->id,
-                            'expire' => time() + 86400 * 365,
-                        ]));
+                    $cookies->add(new \yii\web\Cookie([
+                        'name' => 'id',
+                        'value' => $signup->id,
+                        'expire' => time() + 86400 * 365,
+                    ]));
+                    $_SESSION['ownerId'] =$signup->id;
+                    $this->headerAlertMessage = "User Has been Created";
 
-                        $this->headerAlertMessage = "Player Has been Created";
-                    } else {
-                        $this->headerAlertMessage = "Color has already taken";
-                    }
                 } else {
                     $this->headerAlertMessage = "Password needs to be over 8 letters long";
                 }
+            }
+        } else {
+            if(isset($post['newusername'])) {
+                $this->headerAlertMessage = "No Username is set";
             }
         }
 
@@ -204,10 +206,9 @@ class BpController extends Controller
         $cookies = Yii::$app->response->cookies;
         $cookies->readOnly = false;
 
-        $cookies->remove('player');
-        $cookies->remove('color');
-        $cookies->remove('owner');
-        $this->redirect('/v1/bp/bp/');
+        $cookies->remove('user');
+        $cookies->remove('id');
+        $this->redirect('/bp/bp/');
     }
 
     public function actionSetupnewgame()
