@@ -1,5 +1,7 @@
 <?php
 
+$hostPage = "/bp/bp/";
+
 $cookies = Yii::$app->request->cookies;
 $username = null;
 $color = "#FFFFFF";
@@ -22,7 +24,6 @@ if (isset($cookies['color'])) {
         margin-bottom: 15px;
         border: 1px solid black;
         clear: both;
-        background-color: <?=$color?>
     }
     .scroll-div {
         float: left;
@@ -35,7 +36,7 @@ if (isset($cookies['color'])) {
 </style>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Ready Player Code Challenge</title>
+    <title>Health Diary</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
@@ -46,17 +47,17 @@ if (isset($cookies['color'])) {
 
 <nav class="navbar navbar-expand-lg bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/v1/game/game/">Code Challenge</a>
+        <a class="navbar-brand" href="/v1/game/game/">Health Diary</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a style ="margin-right:20px; border-right: 2px solid #ced4da; margin-left:20px; border-left: 2px solid #ced4da;" class="nav-link active" aria-current="page" href="/v1/game/game/signup/">Sign Up</a>
+                    <a style ="margin-right:20px; border-right: 2px solid #ced4da; margin-left:20px; border-left: 2px solid #ced4da;" class="nav-link active" aria-current="page" href="<?=$hostPage?>signup/">Sign Up</a>
                 </li>
                 <li class="nav-item" style ="margin-left:20px; border-left: 2px solid #ced4da;">
-                    <a class="nav-link active" aria-current="page" href="/v1/game/game/">Game Board</a>
+                    <a class="nav-link active" aria-current="page" href="<?=$hostPage?>">Enter New Information</a>
                 </li>
 
                 <li class="nav-item dropdown" style ="margin-right:20px; border-right: 2px solid #ced4da;">
@@ -64,11 +65,11 @@ if (isset($cookies['color'])) {
                         Docs and Scores
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/v1/game/game/rules/">Game Rules</a></li>
-                        <li><a class="dropdown-item" href="/v1/game/game/apidocs/">Profile and Links</a></li>
-                        <li><a class="dropdown-item" href="/v1/game/game/gifts/">Gift to another player</a></li>
+                        <li><a class="dropdown-item" href="<?=$hostPage?>rules/">Game Rules</a></li>
+                        <li><a class="dropdown-item" href="<?=$hostPage?>apidocs/">Profile and Links</a></li>
+                        <li><a class="dropdown-item" href="<?=$hostPage?>gifts/">Gift to another player</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/v1/game/game/scoreboard/">Scoreboard</a></li>
+                        <li><a class="dropdown-item" href="<?=$hostPage?>scoreboard/">Scoreboard</a></li>
                     </ul>
                 </li>
 
@@ -76,7 +77,7 @@ if (isset($cookies['color'])) {
             </ul>
 
             <?php  if ($username != null) { ?>
-            <div class='box'></div> Ready Player <?= $username?> | <a href="/v1/game/game/logout/"> Log Out </a>
+            <div class='box'></div> Ready Player <?= $username?> | <a href="<?=$hostPage?>logout/"> Log Out </a>
             <?php } else {  ?>
 
             <div class="bootstrap-iso">
