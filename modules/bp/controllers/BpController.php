@@ -8,8 +8,10 @@
 
 namespace app\modules\bp\controllers;
 
+use app\models\bp\users;
 use app\models\readyplayer1\ReadyPlayer1;
 use app\models\readyplayer1\ReadyPlayer1Board;
+use app\models\User;
 use app\modules\game\models\Game;
 use app\modules\game\Module;
 use app\modules\user\controllers\PaymentController;
@@ -20,6 +22,7 @@ use yii\web\Controller;
 
 class BpController extends Controller
 {
+    public $controller = false;
     private $headerAlertMessage = '';
 
     public function beforeAction($action)
@@ -52,25 +55,11 @@ class BpController extends Controller
 
     }
 
-    public function updateColor($get) {
-        $c = $get['c'];
-        $r = $get['r'];
-        $cookies = Yii::$app->request->cookies;
-        if (isset($cookies['color'])) {
-            $cell = ReadyPlayer1Board::findOne(['c' => $c, 'r' => $r]);
-
-            $cell->color = $cookies['color']->value;
-            $cell->owner = $cookies['ownerId']->value;
-            $cell->save();
-            $game = new Game();
-            $game->scoreUp();
-        }
-    }
 
     private function createPage($page = '/index', $pageParams = []) {
-        $game = new Game();
+
         $header = $this->render('/header', ["message" => $this->headerAlertMessage]);
-        $footer = $this->render('/footer', ["scores" => $game->getScores()]);
+        $footer = $this->render('/footer', ["scores" => 0]);
 
         return $header . $this->render($page, $pageParams) . $footer;
     }
@@ -81,36 +70,34 @@ class BpController extends Controller
 
     public function actionGiftscore()
     {
-        $game = new Game();
+
         $result = $game->giftScore();
         $this->headerAlertMessage = "failed to add score";
         if($result == true) {
             $this->headerAlertMessage = "Score has been added";
         }
 
-        return $this->createPage('/gift', ['players' => $game->getScores()]);
+        return $this->createPage('/gift', ['players' => 0]);
     }
 
     public function actionGifts() {
-        $game = new Game();
-        return $this->createPage('/gift', ['players' => $game->getScores()]);
+        return $this->createPage('/gift', ['players' =>0]);
     }
 
     public function actionScoreboard()
     {
-        $game = new Game();
-        return $this->createPage('/scoreboard', ['scores' => $game->getScorebreakdown()]);
+
+        return $this->createPage('/scoreboard', ['scores' => 0]);
     }
 
     public function Login()
     {
 
         $post = Yii::$app->request->post();
-        $user = ReadyPlayer1::findOne(['username' => $post['username']]);
+        $user = users::findOne(['username' => $post['username']]);
         if ($user == false) {
             $this->headerAlertMessage = "User does not exist";
         } else {
-            ;
             if (password_verify($post['password'], $user['password'])) {
 
                 $cookies = Yii::$app->response->cookies;
@@ -150,9 +137,7 @@ class BpController extends Controller
             $owner = $cookies['ownerId']->value;
         }
 
-        $player = ReadyPlayer1::find()->where(['id' => $owner] )->One();
-
-        return $this->createPage('/apidocs', ['player' => $player ]);
+        return $this->createPage('/apidocs', ['player' => null ]);
 
     }
 
@@ -162,11 +147,11 @@ class BpController extends Controller
         $post = Yii::$app->request->post();
         if (isset($post['username']) && $post['username'] != '') {
 
-            $signup = ReadyPlayer1::findOne(['username' => $post['username']]);
+            $signup = Users::findOne(['username' => $post['username']]);
             if ($signup != false) {
                 $this->headerAlertMessage = "Username already exists";
             } else {
-                $signup = ReadyPlayer1::findOne(['color' => $post['color']]);
+                $signup = users::findOne(['color' => $post['color']]);
                 if (strlen($post['password']) > 7) {
                     if ($signup == false) {
                         $cookies = Yii::$app->response->cookies;
@@ -175,7 +160,7 @@ class BpController extends Controller
                         $cookies->remove('color');
                         $cookies->remove('ownerId');
 
-                        $signup = new ReadyPlayer1();
+                        $signup = new users();
                         $signup->key = $this->rand_key();
                         $signup->username = $post['username'];
                         $signup->realname = $post['realname'];
@@ -227,16 +212,6 @@ class BpController extends Controller
 
     public function actionSetupnewgame()
     {
-        for ($c = 0; $c <= 50; $c++) {
-            for ($r = 0; $r <= 50; $r++) {
-                $cell = new ReadyPlayer1Board();
-                $cell->c = $c;
-                $cell->r = $r;
-                $cell->owner= 1;
-                $cell->color= "#000000";
-                $cell->save();
-            }
-        }
     }
 
     Private function rand_key() {

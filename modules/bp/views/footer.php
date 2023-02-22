@@ -15,10 +15,7 @@
     <H1>The Scores</H1>
     <h4>
     <ol>
-        <?php foreach($scores as $score) {
-            echo "<div class='box' style = ' height: 10px; width: 10px; background-color: ".$score['color']." !important;'></div><li>".$score['username'].": ".$score['score']."</li>";
-        }
-        ?>
+    
     </ol>
     </h4>
 </div>
