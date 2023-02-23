@@ -10,15 +10,9 @@
 
 
 </div>
-<div class="col-md-4" style ="padding: 30px">
+<div class="col-md-4" style="padding: 30px">
 
-    <H1>The Scores</H1>
-    <h4>
-    <ol>
-    
-    </ol>
-    </h4>
-</div>
+    <H1>Weekly Stats</H1>
 </div>
 </div>
 </div>

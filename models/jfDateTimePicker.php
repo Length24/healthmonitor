@@ -29,9 +29,9 @@ class jfDateTimePicker
             $max = 'max = ' . $currentDate;
         }
 
-        return '  
-                    <div class="col-sm-12 col-md-5">
-                        <label for="senddaydate" class="question-group-title control-label">' . $dateText . '</label>
+        return ' 
+                    <div class="form-group col-md-4">
+                        <label for="senddaydate">' . $dateText . '</label>
                         <input type="date"
                          id="senddaydate"
                           placeholder="' . $currentDate . '"
@@ -40,8 +40,8 @@ class jfDateTimePicker
                            ' . $max . '
                         value = "' . $currentDate . '">
                     </div>
-                    <div class="col-sm-12 col-md-5">
-                        <label for="senddaytime" class="question-group-title control-label">' . $timeText . '</label>
+                    <div class="form-group col-md-4">
+                        <label for="senddaytime">' . $timeText . '</label>
                         <input type="time" 
                         id="senddaytime" 
                         name="' . $timeName . '" 
@@ -49,9 +49,9 @@ class jfDateTimePicker
                         placeholder="' . $currentTime . '" 
                         min="00:00" 
                         max="23:59" required
-                        value = "' . $currentTime . '">
+                        value = "' . $currentTime . '" >
                     </div>
-                    
+               
                
                
            ';
@@ -75,7 +75,7 @@ class jfDateTimePicker
         $random2 = random_int(1000000, 99999999);
         return '  
                     <div class="col-sm-6">
-                        <label for="senddaydate">' .  $dateText. '</label>
+                        <label for="senddaydate">' . $dateText . '</label>
                         <input type="date"
                          id="senddaydate_' . $random1 . '"
                           placeholder="' . $from . '"
@@ -85,7 +85,7 @@ class jfDateTimePicker
                         max = "' . $today . '">
                     </div>
                     <div class="col-sm-6">
-                        <label for="senddaydate">' .  $endDateText. '</label>
+                        <label for="senddaydate">' . $endDateText . '</label>
                         <input type="date"
                          id="senddaydate_' . $random2 . '"
                           placeholder="' . $to . '"

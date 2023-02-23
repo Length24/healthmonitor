@@ -37,7 +37,7 @@ class BpController extends Controller
 
         $get = Yii::$app->request->get();
 
-        if(isset($get['r'])) {
+        if (isset($get['r'])) {
             $this->updateColor($get);
         }
 
@@ -45,11 +45,11 @@ class BpController extends Controller
             $this->login();
         }
 
-     /* //  $colours = ReadyPlayer1Board::find()->all();
-        $color = [];
-        foreach ($colours as $cell) {
-            $color[$cell->c][$cell->r] = $cell->color;
-        }*/
+        /* //  $colours = ReadyPlayer1Board::find()->all();
+           $color = [];
+           foreach ($colours as $cell) {
+               $color[$cell->c][$cell->r] = $cell->color;
+           }*/
 
         return $this->createPage('/index', []);
 
@@ -57,7 +57,8 @@ class BpController extends Controller
     }
 
 
-    private function createPage($page = '/index', $pageParams = []) {
+    private function createPage($page = '/index', $pageParams = [])
+    {
 
         $header = $this->render('/header', ["message" => $this->headerAlertMessage]);
         $footer = $this->render('/footer', ["scores" => 0]);
@@ -65,7 +66,8 @@ class BpController extends Controller
         return $header . $this->render($page, $pageParams) . $footer;
     }
 
-    public function actionRules() {
+    public function actionRules()
+    {
         return $this->createPage('/rules', []);
     }
 
@@ -74,30 +76,31 @@ class BpController extends Controller
 
         $result = $game->giftScore();
         $this->headerAlertMessage = "failed to add score";
-        if($result == true) {
+        if ($result == true) {
             $this->headerAlertMessage = "Score has been added";
         }
 
         return $this->createPage('/gift', ['players' => 0]);
     }
 
-    public function actionGifts() {
-        return $this->createPage('/gift', ['players' =>0]);
+    public function actionGifts()
+    {
+        return $this->createPage('/gift', ['players' => 0]);
     }
-
 
 
     public function actionDailyupdate()
     {
         $post = Yii::$app->request->post();
-        if(isset($post['sys'])) {
+
+        if (isset($post['sys'])) {
             $health = new Health();
             $health->sys = $post['sys'];
             $health->dia = $post['dia'];
-            $health->pul = $post['pulse'];
+            $health->pul = $post['pul'];
             $health->step = $post['step'];
             $health->other = $post['other'];
-            $health->datetime = $post['datesupplementary-123'].' '.$post['timesupplementary-123'];
+            $health->datetime = $post['senddaydate'] . ' ' . $post['senddaytime'];
             $health->save();
             $this->headerAlertMessage = "Added Reading";
         }
@@ -146,7 +149,7 @@ class BpController extends Controller
             $owner = $cookies['ownerId']->value;
         }
 
-        return $this->createPage('/apidocs', ['player' => null ]);
+        return $this->createPage('/apidocs', ['player' => null]);
 
     }
 
@@ -185,7 +188,7 @@ class BpController extends Controller
                         'value' => $signup->id,
                         'expire' => time() + 86400 * 365,
                     ]));
-                    $_SESSION['ownerId'] =$signup->id;
+                    $_SESSION['ownerId'] = $signup->id;
                     $this->headerAlertMessage = "User Has been Created";
 
                 } else {
@@ -193,7 +196,7 @@ class BpController extends Controller
                 }
             }
         } else {
-            if(isset($post['newusername'])) {
+            if (isset($post['newusername'])) {
                 $this->headerAlertMessage = "No Username is set";
             }
         }
@@ -202,7 +205,8 @@ class BpController extends Controller
     }
 
 
-    public function actionLogout() {
+    public function actionLogout()
+    {
         $cookies = Yii::$app->response->cookies;
         $cookies->readOnly = false;
 
@@ -215,8 +219,9 @@ class BpController extends Controller
     {
     }
 
-    Private function rand_key() {
-        return  str_pad(dechex(mt_rand(0, 0xFFFFFFFFFF)), 11, '0', STR_PAD_LEFT);
+    private function rand_key()
+    {
+        return str_pad(dechex(mt_rand(0, 0xFFFFFFFFFF)), 11, '0', STR_PAD_LEFT);
     }
 
 }
