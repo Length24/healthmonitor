@@ -37,16 +37,16 @@
             </div>
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    <label for="dia">Dia.mmHg</label>
-                    <input type="number" class="form-control" id="dia" name="dia" placeholder="90">
+                    <label for="sys">Sys.mmHG</label>
+                    <input type="number" class="form-control" id="sys" name="sys" placeholder="120">
                 </div>
                 <div class="form-group col-md-4">
-                    <label for="sys">Sys.mmHG</label>
-                    <input type="number" class="form-control" id="sys" name="sys" placeholder="40">
+                    <label for="dia">Dia.mmHg</label>
+                    <input type="number" class="form-control" id="dia" name="dia" placeholder="80">
                 </div>
                 <div class="form-group col-md-4">
                     <label for="pul">Pulse</label>
-                    <input type="number" class="form-control" id="pul" name="pul" placeholder="40">
+                    <input type="number" class="form-control" id="pul" name="pul" placeholder="60">
                 </div>
             </div>
             <div class="form-group">
