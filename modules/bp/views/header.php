@@ -4,7 +4,6 @@ $hostPage = "/bp/bp/";
 
 $cookies = Yii::$app->request->cookies;
 $username = null;
-$color = "#FFFFFF";
 if (isset($cookies['user'])) {
     $username = $cookies['user']->value;
 }
@@ -41,34 +40,32 @@ if (isset($cookies['user'])) {
             content: "X ";
         }
 
+        body {
+            padding-bottom: 70px;
+        }
+
 
     </style>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Health Diary</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="assets/css/libs/bootstrap-datetimepicker.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
-            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
-            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-            crossorigin="anonymous"></script>
 
-    <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-                integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
-                crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
-                integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz"
-                crossorigin="anonymous"></script>-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.2.3/journal/bootstrap.min.css"
+          integrity="sha512-idjfPXQ6riP0BTBfHP0Suns3C1yZK486mMgm6Dd1pRQDizubroQ6EMZNP2S86C42mTOXCfKAQ/wcQ//Q3V2mQg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+
+    <script src="https://use.fontawesome.com/c7e49cd2a1.js"></script>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+            integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+            integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz"
+            crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -101,12 +98,14 @@ if (isset($cookies['user'])) {
                             Reporting and Data Manipulation
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="<?= $hostPage ?>rules/">Game Rules</a></li>
-                            <li><a class="dropdown-item" href="<?= $hostPage ?>apidocs/">Profile and Links</a></li>
-                            <li><a class="dropdown-item" href="<?= $hostPage ?>gifts/">Gift to another player</a></li>
+                            <li><a class="dropdown-item" href="<?= $hostPage ?>edit/">View and edit past readings</a>
+                            </li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
+                            <li><a class="dropdown-item" href="<?= $hostPage ?>apidocs/">Profile and Links</a></li>
+                            <li><a class="dropdown-item" href="<?= $hostPage ?>gifts/">Gift to another player</a></li>
+
                             <li><a class="dropdown-item" href="<?= $hostPage ?>scoreboard/">Scoreboard</a></li>
                         </ul>
                     </li>

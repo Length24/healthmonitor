@@ -16,11 +16,13 @@
 </div>
 </div>
 </div>
-<div class="row">
+<div class="row fixed-bottom">
     <div class="col-md-2">
     </div>
-    <div class="col-md-8">
-        Copyright = (c) James Fearnley 2022
+    <div class="col-md-8" style="text-align :center">
+        Copyright = &copy; James Fearnley 2022 - <?= date('Y') ?>, built using the <a
+                href="https://www.yiiframework.com/"> yii framework </a>under
+        the <a href="https://www.yiiframework.com/license"> GPL</a> <br/>.
     </div>
 </div>
 </body>

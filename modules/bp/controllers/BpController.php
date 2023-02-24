@@ -10,14 +10,13 @@ namespace app\modules\bp\controllers;
 
 use app\models\bp\Health;
 use app\models\bp\users;
-use app\models\readyplayer1\ReadyPlayer1;
-use app\models\readyplayer1\ReadyPlayer1Board;
+
 use app\models\User;
-use app\modules\game\models\Game;
-use app\modules\game\Module;
-use app\modules\user\controllers\PaymentController;
+use app\modules\bp\models\Bp;
+
 use Yii;
 
+use yii\db\Exception;
 use yii\web\Controller;
 
 
@@ -37,19 +36,9 @@ class BpController extends Controller
 
         $get = Yii::$app->request->get();
 
-        if (isset($get['r'])) {
-            $this->updateColor($get);
-        }
-
         if (!empty($post) && isset($post['username'])) {
             $this->login();
         }
-
-        /* //  $colours = ReadyPlayer1Board::find()->all();
-           $color = [];
-           foreach ($colours as $cell) {
-               $color[$cell->c][$cell->r] = $cell->color;
-           }*/
 
         return $this->createPage('/index', []);
 
@@ -74,18 +63,46 @@ class BpController extends Controller
     public function actionGiftscore()
     {
 
-        $result = $game->giftScore();
-        $this->headerAlertMessage = "failed to add score";
-        if ($result == true) {
-            $this->headerAlertMessage = "Score has been added";
-        }
-
         return $this->createPage('/gift', ['players' => 0]);
     }
 
-    public function actionGifts()
+    public function actionEdit()
     {
-        return $this->createPage('/gift', ['players' => 0]);
+        $get = Yii::$app->request->get();
+        $post = Yii::$app->request->post();
+        if (isset($post['sys']) && isset($get['id'])) {
+            $check = Health::findOne(['id' => $get['id'], 'deleted' => 0]);
+            $check->updateCheck($post);
+            $this->headerAlertMessage = "Report Updated";
+            $this->redirect(array('/bp/bp/edit')); //clear the post and get data
+        } else if (isset($get['del']) && isset($get['id'])) {
+            $check = Health::findOne(['id' => $get['id'], 'deleted' => 0]);
+
+            if ($check !== null) {
+                try {
+                    $check->deleted = true;
+                    $check->save();
+                    $this->headerAlertMessage = "Check Deleted";
+                } catch (Exception $e) {
+                    $this->headerAlertMessage = "Delete Failed";
+                }
+            } else {
+                $this->headerAlertMessage = "Delete Failed";
+            }
+        }
+
+        $check = null;
+        if (isset($get['edit']) && isset($get['id'])) {
+            $check = Health::findOne(['id' => $get['id'], 'deleted' => 0]);
+        }
+
+        if ($check !== null) {
+            return $this->createPage('/dailyupdate', ['editJob' => $check]);
+        } else {
+            $model = new Bp();
+            $fullData = $model->getBpData(true);
+            return $this->createPage('/edit', ['dataset' => $fullData]);
+        }
     }
 
 
@@ -94,18 +111,16 @@ class BpController extends Controller
         $post = Yii::$app->request->post();
 
         if (isset($post['sys'])) {
-            $health = new Health();
-            $health->sys = $post['sys'];
-            $health->dia = $post['dia'];
-            $health->pul = $post['pul'];
-            $health->step = $post['step'];
-            $health->other = $post['other'];
-            $health->datetime = $post['senddaydate'] . ' ' . $post['senddaytime'];
-            $health->save();
-            $this->headerAlertMessage = "Added Reading";
+            $health = new Bp();
+            if ($health->saveHealthCheck($post)) {
+                $this->headerAlertMessage = "Added Reading";
+            } else {
+                $this->headerAlertMessage = "Save Failed";
+            }
+
         }
 
-        return $this->createPage('/dailyupdate', ['scores' => 0]);
+        return $this->createPage('/dailyupdate', []);
     }
 
     public function Login()
@@ -215,13 +230,9 @@ class BpController extends Controller
         $this->redirect('/bp/bp/');
     }
 
-    public function actionSetupnewgame()
-    {
-    }
-
     private function rand_key()
     {
-        return str_pad(dechex(mt_rand(0, 0xFFFFFFFFFF)), 11, '0', STR_PAD_LEFT);
+        return str_pad(dechex(mt_rand(0, 0xFFFFFFFFFF)), 16, '0', STR_PAD_LEFT);
     }
 
 }

@@ -6,6 +6,21 @@
  * Time: 11:11
  */
 
+$theDate = $theTime = $idValue = $sysValue = $diaValue = $pulValue = $stepValue = $otherValue = '';
+if (isset($editJob)) {
+
+    $date = new \dateTime($editJob['datetime']);
+    $theDate = $date->format('Y-m-d');
+    $theTime = $date->format('H:i');
+    $idValue = $editJob['id'];
+    $sysValue = $editJob['sys'];
+    $diaValue = $editJob['dia'];
+    $pulValue = $editJob['pul'];
+    $stepValue = $editJob['step'];
+    $otherValue = $editJob['other'];
+}
+
+
 ?>
 
 <div class="row">
@@ -19,42 +34,52 @@
 
     <div class="col-md-10">
         <form method="post">
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="step">Step Count</label>
-                    <input type="number" class="form-control" name="step" id="step" placeholder="90">
+            <div class="row">
+                <div class="mb-3 col-md-2">
+                    <label for="step">ID</label>
+                    <input type="number" class="form-control" name="id" id="id" placeholder="90"
+                           value="<?= $idValue ?>" disabled>
                 </div>
-                <div class="form-group col-md-3">
+                <div class="mb-3 col-md-4">
+                    <label for="step">Step Count</label>
+                    <input type="number" class="form-control" name="step" id="step" placeholder="90"
+                           value="<?= $stepValue ?>">
+                </div>
+                <div class="mb-3 col-md-3">
                     <label for="senddaydate">Date of Check</label>
                     <br/>
-                    <input type="date" id="senddaydate" name="senddaydate">
+                    <input type="date" id="senddaydate" name="senddaydate" value="<?= $theDate ?>">
                 </div>
-                <div class="form-group col-md-3">
+                <div class="mb-3 col-md-3">
                     <label for="senddaydate">Time of Check</label>
                     <br/>
-                    <input type="time" id="senddaytime" name="senddaytime">
+                    <input type="time" id="senddaytime" name="senddaytime" value="<?= $theTime ?>">
                 </div>
             </div>
-            <div class="form-row">
-                <div class="form-group col-md-4">
+            <div class="row">
+                <div class="mb-3 col-md-4">
                     <label for="sys">Sys.mmHG</label>
-                    <input type="number" class="form-control" id="sys" name="sys" placeholder="120">
+                    <input type="number" class="form-control" id="sys" name="sys" placeholder="120"
+                           value="<?= $sysValue ?>">
                 </div>
-                <div class="form-group col-md-4">
+                <div class="mb-3 col-md-4">
                     <label for="dia">Dia.mmHg</label>
-                    <input type="number" class="form-control" id="dia" name="dia" placeholder="80">
+                    <input type="number" class="form-control" id="dia" name="dia" placeholder="80"
+                           value="<?= $diaValue ?>">
                 </div>
-                <div class="form-group col-md-4">
+                <div class="mb-3 col-md-4">
                     <label for="pul">Pulse</label>
-                    <input type="number" class="form-control" id="pul" name="pul" placeholder="60">
+                    <input type="number" class="form-control" id="pul" name="pul" placeholder="60"
+                           value="<?= $pulValue ?>">
                 </div>
             </div>
-            <div class="form-group">
-                <label for="other">Any other information</label>
-                <textarea class="form-control" id="other" name="other" rows="3"></textarea>
+            <div class="row">
+                <div class="mb-3 col-md-12">
+                    <label for="other">Any other information</label>
+                    <textarea class="form-control" id="other" name="other" rows="3"><?= $otherValue ?> </textarea>
+                </div>
             </div>
-
-            <div class="form-group">
+            <div class="row mb-3">
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="gridCheck">
                     <label class="form-check-label" for="gridCheck">
