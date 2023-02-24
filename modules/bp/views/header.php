@@ -103,10 +103,13 @@ if (isset($cookies['user'])) {
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="<?= $hostPage ?>apidocs/">Profile and Links</a></li>
-                            <li><a class="dropdown-item" href="<?= $hostPage ?>gifts/">Gift to another player</a></li>
-
-                            <li><a class="dropdown-item" href="<?= $hostPage ?>scoreboard/">Scoreboard</a></li>
+                            <li><a class="dropdown-item" href="<?= $hostPage ?>reporting/">Reporting and Graphs</a></li>
+                            <li><a class="dropdown-item" href="<?= $hostPage ?>exports/">Exports</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="<?= $hostPage ?>faq/">FAQ</a></li>
+                            <li><a class="dropdown-item" href="<?= $hostPage ?>apidocs/">API Docs</a></li>
                         </ul>
                     </li>
 
