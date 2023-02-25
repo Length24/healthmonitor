@@ -34,13 +34,11 @@ class BpController extends Controller
     {
         $post = Yii::$app->request->post();
 
-        $get = Yii::$app->request->get();
-
         if (!empty($post) && isset($post['username'])) {
             $this->login();
         }
 
-        return $this->createPage('/index', []);
+        return $this->createPage();
 
 
     }
@@ -111,6 +109,11 @@ class BpController extends Controller
         }
     }
 
+    public function actionProfile()
+    {
+        return $this->createPage('/profile', ['showfaq' => true]);
+
+    }
 
     public function actionDailyupdate()
     {
@@ -129,8 +132,9 @@ class BpController extends Controller
         return $this->createPage('/dailyupdate', []);
     }
 
-    public function Login()
+    public function Login() //this needs moving to the model
     {
+        $this->headerAlertMessage = "";
         $post = Yii::$app->request->post();
         $user = users::findOne(['username' => $post['username']]);
         if ($user == false) {
@@ -152,13 +156,12 @@ class BpController extends Controller
                     'value' => $user['id'],
                     'expire' => time() + 86400 * 365,
                 ]));
-
+                $this->redirect(array('/bp/bp/dailyupdate'));
 
             } else {
                 $this->headerAlertMessage = "Incorrect Password";
             }
         }
-
     }
 
     public function actionApidocs()
