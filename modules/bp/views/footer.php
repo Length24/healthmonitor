@@ -22,7 +22,7 @@
     <div class="col-md-8" style="text-align :center">
         Copyright = &copy; James Fearnley 2022 - <?= date('Y') ?>, built using the <a
                 href="https://www.yiiframework.com/"> yii framework </a>under
-        the <a href="https://www.yiiframework.com/license"> GPL</a> <br/>.
+        the <a href="https://www.yiiframework.com/license"> under the BSD-3 license</a> <br/>.
     </div>
 </div>
 </body>
