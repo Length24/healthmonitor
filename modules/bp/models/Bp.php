@@ -20,7 +20,7 @@ class Bp extends \yii\base\Model
                         FROM bpmain.health_check rt
                         JOIN bpmain.routing ro ON ro.id = 1
                         ' . $where['sql'] . '
-                        ORDER BY rt.datetime';
+                        ORDER BY rt.datetime DESC';
 
             $result = Yii::$app->db->createCommand($sql, $where['params'])->queryAll();
         }

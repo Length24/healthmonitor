@@ -103,7 +103,7 @@ if (isset($cookies['user'])) {
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="<?= $hostPage ?>reporting/">Reporting and Graphs</a></li>
+                            <li><a class="dropdown-item" href="<?= $hostPage ?>reporting/">Graphing the Data</a></li>
                             <li><a class="dropdown-item" href="<?= $hostPage ?>exports/">Exports</a></li>
                             <li>
                                 <hr class="dropdown-divider">
@@ -120,29 +120,32 @@ if (isset($cookies['user'])) {
             Logged In user <?= $username ?> | <a href="<?= $hostPage ?>logout/"> Log Out </a>
         <?php } else { ?>
 
-            <div class="bootstrap-iso">
-                <form method="post" class="d-flex" action="/bp/bp/">
-                    <div class="form-group ">
+
+            <form method="post" class="d-flex" action="/bp/bp/">
+                <div class="row">
+                    <div class="mb-3 col-md-4">
                         <label class="control-label " for="name">
                             Username
                         </label>
                         <input class="form-control" id="username" name="username" type="text"/>
                     </div>
-                    <div class="form-group ">
+                    <div class="mb-3 col-md-4">
                         <label class="control-label " for="password">
                             Password
                         </label>
-                        <input class="form-control" id="password" name="password" type="password" aria-hidden="true"/>
+                        <input class="form-control" id="password" name="password" type="password"
+                               aria-hidden="true"/>
                     </div>
-                    <div class="form-group">
+                    <div class="mb-3 pt-4 col-md-4">
                         <div>
+
                             <button class="btn btn-primary " name="submit" type="submit">
                                 Submit
                             </button>
                         </div>
                     </div>
-                </form>
-            </div>
+            </form>
+
         <?php } ?>
     </div>
 </nav>
