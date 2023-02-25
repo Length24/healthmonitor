@@ -32,8 +32,12 @@ if (isset($cookies['ownerId'])) {
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
+<div class="row">
+    <div class="col-md-12" style="text-align: center">
+        <h1>View/Edit Readings</h1>
+    </div>
+</div>
 
-<h1>View/Edit Readings</h1>
 <div class="row">
     <div class="col-md-12">
         <table class="healthtable" id="healthtable">

@@ -55,15 +55,21 @@ class BpController extends Controller
         return $header . $this->render($page, $pageParams) . $footer;
     }
 
-    public function actionRules()
+    public function actionExports()
     {
-        return $this->createPage('/rules', []);
+        return $this->createPage('/exports', []);
     }
 
-    public function actionGiftscore()
+    public function actionReporting()
     {
 
-        return $this->createPage('/gift', ['players' => 0]);
+        return $this->createPage('/reporting', []);
+    }
+
+    public function actionFaq()
+    {
+
+        return $this->createPage('/faq', []);
     }
 
     public function actionEdit()
@@ -157,15 +163,7 @@ class BpController extends Controller
 
     public function actionApidocs()
     {
-        $cookies = Yii::$app->request->cookies;
-
-        $owner = null;
-        if (isset($cookies['ownerId'])) {
-            $owner = $cookies['ownerId']->value;
-        }
-
-        return $this->createPage('/apidocs', ['player' => null]);
-
+        return $this->createPage('/apidocs', []);
     }
 
 
