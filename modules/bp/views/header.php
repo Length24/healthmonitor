@@ -108,7 +108,7 @@ if (isset($cookies['user'])) {
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="<?= $hostPage ?>faq/">FAQ</a></li>
+                            <li><a class="dropdown-item" href="<?= $hostPage ?>profile/">Profile and FAQ</a></li>
                             <li><a class="dropdown-item" href="<?= $hostPage ?>apidocs/">API Docs</a></li>
                         </ul>
                     </li>

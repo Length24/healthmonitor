@@ -109,6 +109,11 @@ class BpController extends Controller
         }
     }
 
+    public function actionProfile()
+    {
+        return $this->createPage('/profile', ['showfaq' => true]);
+
+    }
 
     public function actionDailyupdate()
     {
@@ -151,7 +156,7 @@ class BpController extends Controller
                     'value' => $user['id'],
                     'expire' => time() + 86400 * 365,
                 ]));
-                $this->redirect(array('/bp/bp/dailyupdate')); //need to identify why this is is not working!
+                $this->redirect(array('/bp/bp/dailyupdate'));
 
             } else {
                 $this->headerAlertMessage = "Incorrect Password";
