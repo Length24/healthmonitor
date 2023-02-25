@@ -54,11 +54,11 @@ if (isset($cookies['ownerId'])) {
         {"className": "dt-body-left", "title": "Date and Time"},
         {"className": "dt-body-center", "title": "SYS.mmHg"},
         {"className": "dt-body-center", "title": "DIA.mmHg"},
-        {"className": "dt-body-center", "title": "PUl.min"},
+        {"className": "dt-body-center", "title": "PUL.min"},
         {"className": "dt-body-center", "title": "Steps"},
-        {"className": "dt-body-right", "title": "Other Information"},
+        {"className": "dt-body-right dt-head-right", "title": "Other Information"},
         {
-            "className": "dt-body-right dt-head-right",
+            "className": "dt-body-center dt-head-center",
             "title": "Delete",
             "data": "download_link",
             "render": function (data, type, row, meta) {
@@ -66,7 +66,7 @@ if (isset($cookies['ownerId'])) {
             },
         },
         {
-            "className": "dt-body-right", "title": "Edit",
+            "className": "dt-body-center dt-head-center", "title": "Edit",
             "data": "download_link",
             "render": function (data, type, row, meta) {
                 return '<a href="' + row[7] + '"><i class="fa fa-pencil-square fa-3" aria-hidden="true"></i></a>';

@@ -49,21 +49,21 @@ class BpController extends Controller
     private function createPage($page = '/index', $pageParams = [])
     {
 
-        $header = $this->render('/header', ["message" => $this->headerAlertMessage]);
-        $footer = $this->render('/footer', ["scores" => 0]);
+        $header = $this->render('/header', ["message" => $this->headerAlertMessage, "params" => $pageParams]);
+        $footer = $this->render('/footer', ["params" => $pageParams]);
 
         return $header . $this->render($page, $pageParams) . $footer;
     }
 
     public function actionExports()
     {
-        return $this->createPage('/exports', []);
+        return $this->createPage('/exports', ['showfilter' => true]);
     }
 
     public function actionReporting()
     {
 
-        return $this->createPage('/reporting', []);
+        return $this->createPage('/reporting', ['showfilter' => true]);
     }
 
     public function actionFaq()
@@ -107,7 +107,7 @@ class BpController extends Controller
         } else {
             $model = new Bp();
             $fullData = $model->getBpData(true);
-            return $this->createPage('/edit', ['dataset' => $fullData]);
+            return $this->createPage('/edit', ['dataset' => $fullData, 'showfilter' => true]);
         }
     }
 
