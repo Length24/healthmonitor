@@ -5,10 +5,7 @@
  * Date: 12/09/2022
  * Time: 14:07
  */
-
 ?>
-
-
 </div>
 <div class="col-md-4" style="padding: 30px">
     <?php if ($username !== null) { ?>
@@ -20,12 +17,12 @@
                         <div class="mb-3 col-xs-12 col-md-12">
                             <label for="filter">Select Report-type:</label>
                             <select id="filter" name="filter">
-                                <option value="1" selected>All Data</option>
-                                <option value="2">Average AM and PM</option>
-                                <option value="3">Average Daily</option>
-                                <option value="4">Average Weekly</option>
-                                <option value="5">Highest Daily</option>
-                                <option value="5">Lowest Daily</option>
+                                <option value="1" <?= $footerParams['type1'] ?>>All Data</option>
+                                <option value="2" <?= $footerParams['type2'] ?>>Average AM and PM</option>
+                                <option value="3" <?= $footerParams['type3'] ?>>Average Daily</option>
+                                <option value="4" <?= $footerParams['type4'] ?>>Average Weekly</option>
+                                <option value="5" <?= $footerParams['type5'] ?>>Highest Daily</option>
+                                <option value="6" <?= $footerParams['type6'] ?>>Lowest Daily</option>
                             </select>
                         </div>
                         <div class="mb-3 col-xs-12 col-md-12">
@@ -35,13 +32,16 @@
                                                 class="fa fa-arrow-circle-right" aria-hidden="true"></i></label>
                                 </div>
                                 <div class="mb-3 col-xs-12 col-md-6">
-                                    <select id="include" name="include" multiple>
-                                        <option value="1" selected>SYS.mmHg</option>
-                                        <option value="2" selected>DIA.mmHg</option>
-                                        <option value="3" selected>PUL/min</option>
-                                        <option value="4" selected>Steps</option>
-                                        <option value="5" selected>Average Km</option>
-                                    </select>
+                                    <input type="checkbox" name="SYSmmHg" id="SYSmmHg"
+                                           value="" <?= $footerParams['SYSmmHg'] ?>>SYSmmHg<br>
+                                    <input type="checkbox" name="DIAmmHg" id="DIAmmHg"
+                                           value="" <?= $footerParams['DIAmmHg'] ?>>DIA.mmHg<br>
+                                    <input type="checkbox" name="Pulse" id="Pulse"
+                                           value="" <?= $footerParams['Pulse'] ?>>Pulse<br>
+                                    <input type="checkbox" name="Steps" id="Steps"
+                                           value="" <?= $footerParams['Steps'] ?>>Steps<br>
+                                    <input type="checkbox" name="AverageKm" id="AverageKm"
+                                           value="" <?= $footerParams['AverageKm'] ?>>AverageKm<br>
                                 </div>
                             </div>
                         </div>
@@ -50,12 +50,12 @@
                         <div class="mb-3 col-xs-12 col-md-6">
                             <label for="fromdate">From</label>
                             <br/>
-                            <input type="date" id="fromdate" name="fromdate">
+                            <input type="date" id="fromdate" name="fromdate" value="<?= $footerParams['from'] ?>">
                         </div>
                         <div class="mb-3 col-xs-12 col-md-6">
                             <label for="todate">to</label>
                             <br/>
-                            <input type="date" id="todate" name="rodate">
+                            <input type="date" id="todate" name="todate" value="<?= $footerParams['to'] ?>">
                         </div>
                     </div>
                     <div class="row mb-3 col-xs-12">

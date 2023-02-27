@@ -54,9 +54,39 @@ class BpController extends Controller
         }
 
         $header = $this->render('/header', ["message" => $this->headerAlertMessage, "params" => $pageParams, "username" => $username, 'hostPage' => $hostPage]);
-        $footer = $this->render('/footer', ["params" => $pageParams, "username" => $username]);
+        $footer = $this->render('/footer', ["params" => $pageParams, "username" => $username, 'footerParams' => $this->getFooterParams()]);
 
         return $header . $this->render($page, $pageParams) . $footer;
+    }
+
+    private function getFooterParams()
+    {
+        //identify and recheck checkboxes.
+        $get = Yii::$app->request->get();
+        $array = ['SYSmmHg' => '', 'DIAmmHg' => '', 'Pulse' => '', 'Steps' => '', 'AverageKm' => ''];
+        foreach ($array as $id => $checkboxes) {
+            if (isset($get[$id])) {
+                $array[$id] = 'checked';
+            }
+        }
+
+        $array['to'] = $array['from'] = date('Y-m-d');
+        if (isset($get['fromdate'])) {
+            $array['from'] = $get['fromdate'];
+        }
+        if (isset($get['todate'])) {
+            $array['to'] = $get['todate'];
+        }
+
+        for ($x = 1; $x <= 6; $x++) {
+            $array['type' . $x] = '';
+        }
+        $array['type1'] = 'selected';
+        if (isset($get['filter']) && isset($array['type' . $get['filter']])) {
+            $array['type' . $get['filter']] = 'selected';
+        }
+
+        return $array;
     }
 
     public function actionExports()
