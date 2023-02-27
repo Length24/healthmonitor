@@ -5,11 +5,7 @@
  * Date: 12/09/2022
  * Time: 14:07
  */
-$cookies = Yii::$app->request->cookies;
-$username = null;
-if (isset($cookies['user'])) {
-    $username = $cookies['user']->value;
-}
+
 ?>
 
 

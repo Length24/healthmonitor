@@ -1,13 +1,5 @@
 <?php
 
-$hostPage = "/bp/bp/";
-
-$cookies = Yii::$app->request->cookies;
-$username = null;
-if (isset($cookies['user'])) {
-    $username = $cookies['user']->value;
-}
-
 ?>
 <!doctype html>
 <html lang="en">

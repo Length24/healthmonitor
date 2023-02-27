@@ -46,9 +46,15 @@ class BpController extends Controller
 
     private function createPage($page = '/index', $pageParams = [])
     {
+        $hostPage = "/bp/bp/";
+        $cookies = Yii::$app->request->cookies;
+        $username = null;
+        if (isset($cookies['user'])) {
+            $username = $cookies['user']->value;
+        }
 
-        $header = $this->render('/header', ["message" => $this->headerAlertMessage, "params" => $pageParams]);
-        $footer = $this->render('/footer', ["params" => $pageParams]);
+        $header = $this->render('/header', ["message" => $this->headerAlertMessage, "params" => $pageParams, "username" => $username, 'hostPage' => $hostPage]);
+        $footer = $this->render('/footer', ["params" => $pageParams, "username" => $username]);
 
         return $header . $this->render($page, $pageParams) . $footer;
     }
