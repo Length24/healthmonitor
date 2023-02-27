@@ -163,6 +163,7 @@ class Bp extends \yii\base\Model
 
         if (!$anyChecked) {
             foreach ($array as $id => $field) {
+                $this->dataTableColumns[$id] = true;
                 $fields[] = $field . ' as ' . $id;
             }
         }
