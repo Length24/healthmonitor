@@ -154,20 +154,20 @@ class Bp extends \yii\base\Model
             }
         }
 
-        if ($filter == 1) { // no edit and delete filters if groupBy data
-            $this->dataTableColumns['del'] = true;
-            $this->dataTableColumns['edit'] = true;
-            $fields['del'] = 'a.del';
-            $fields['edit'] = 'a.edit';
-        }
-
         if (!$anyChecked) {
             foreach ($array as $id => $field) {
                 $this->dataTableColumns[$id] = true;
                 $fields[] = $field . ' as ' . $id;
             }
         }
-     
+
+        if ($filter == 1) { // no edit and delete filters if groupBy data
+            $this->dataTableColumns['del'] = true;
+            $this->dataTableColumns['edit'] = true;
+            $fields['del'] = 'a.del';
+            $fields['edit'] = 'a.edit';
+        }
+        
         return implode(',', $fields);
 
     }
