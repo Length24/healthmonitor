@@ -75,7 +75,7 @@ if (isset($cookies['ownerId'])) {
             "title": "Delete",
             "data": "download_link",
             "render": function (data, type, row, meta) {
-                return '<a href="' + row[8] + '"><i class="fa fa-trash fa-3" aria-hidden="true"></i></a>';
+                return '<a href="' + row[7] + '"><i class="fa fa-trash fa-3" aria-hidden="true"></i></a>';
             },
         },
         <?php } ?>
