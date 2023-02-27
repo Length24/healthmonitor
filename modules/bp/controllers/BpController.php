@@ -63,11 +63,18 @@ class BpController extends Controller
     {
         //identify and recheck checkboxes.
         $get = Yii::$app->request->get();
-        $array = ['SYSmmHg' => '', 'DIAmmHg' => '', 'Pulse' => '', 'Steps' => '', 'AverageKm' => ''];
+        $array = ['SYSmmHg' => '', 'DIAmmHg' => '', 'Pulse' => '', 'Steps' => '', 'AverageKm' => '', 'otherInfo' => ''];
+
+        $anyChecked = false;
         foreach ($array as $id => $checkboxes) {
             if (isset($get[$id])) {
+                $anyChecked = true;
                 $array[$id] = 'checked';
             }
+        }
+        //check all if all off.
+        if (!$anyChecked) {
+            $array = ['SYSmmHg' => 'checked', 'DIAmmHg' => 'checked', 'Pulse' => 'checked', 'Steps' => 'checked', 'AverageKm' => 'checked', 'otherInfo' => 'checked'];
         }
 
         $array['to'] = $array['from'] = date('Y-m-d');
@@ -141,7 +148,7 @@ class BpController extends Controller
         } else {
             $model = new Bp();
             $fullData = $model->getBpData(true);
-            return $this->createPage('/edit', ['dataset' => $fullData, 'showfilter' => true]);
+            return $this->createPage('/edit', ['dataset' => $fullData, 'showfilter' => true, 'colInfo' => $model->getDataTableColumns()]);
         }
     }
 

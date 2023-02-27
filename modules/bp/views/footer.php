@@ -31,17 +31,21 @@
                                     <label for="filter">Select Data to include (Ctrl Click to select multiple) <i
                                                 class="fa fa-arrow-circle-right" aria-hidden="true"></i></label>
                                 </div>
-                                <div class="mb-3 col-xs-12 col-md-6">
+                                <div class="mb-3 col-xs-12 col-md-4">
                                     <input type="checkbox" name="SYSmmHg" id="SYSmmHg"
                                            value="" <?= $footerParams['SYSmmHg'] ?>>SYSmmHg<br>
                                     <input type="checkbox" name="DIAmmHg" id="DIAmmHg"
                                            value="" <?= $footerParams['DIAmmHg'] ?>>DIA.mmHg<br>
                                     <input type="checkbox" name="Pulse" id="Pulse"
                                            value="" <?= $footerParams['Pulse'] ?>>Pulse<br>
+                                </div>
+                                <div class="mb-3 col-xs-12 col-md-4">
                                     <input type="checkbox" name="Steps" id="Steps"
                                            value="" <?= $footerParams['Steps'] ?>>Steps<br>
                                     <input type="checkbox" name="AverageKm" id="AverageKm"
-                                           value="" <?= $footerParams['AverageKm'] ?>>AverageKm<br>
+                                           value="" <?= $footerParams['AverageKm'] ?>>Average Km<br>
+                                    <input type="checkbox" name="otherInfo" id="otherInfo"
+                                           value="" <?= $footerParams['otherInfo'] ?>>Other<br>
                                 </div>
                             </div>
                         </div>
