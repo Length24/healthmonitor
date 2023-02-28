@@ -33,9 +33,8 @@ class Bp extends \yii\base\Model
         $result = [];
         $grouping = $this->getGrouping();
         $fields = $this->getFields();
-
-
         $where = $this->getBpDataWhere();
+
         if ($where !== false) {
             $sql = 'SELECT ' . $fields . '
                     FROM (
@@ -167,7 +166,7 @@ class Bp extends \yii\base\Model
             $fields['del'] = 'a.del';
             $fields['edit'] = 'a.edit';
         }
-        
+
         return implode(',', $fields);
 
     }

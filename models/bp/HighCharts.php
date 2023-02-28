@@ -19,6 +19,8 @@ class HighCharts extends ActiveRecord
     protected array $legend = [];
     protected array $series = [];
 
+    protected array $categories = [];
+
     public static function tableName()
     {
         return 'graph_settings';
@@ -28,6 +30,7 @@ class HighCharts extends ActiveRecord
     {
         $this->getRawData();
         $graph = [];
+        $graph['series'] = $this->getSeries();
         $graph['chart'] = $this->getGraphtype();
         $graph['title'] = $this->getGraphtitle();
         $graph['xAxis'] = $this->getXAxis();
@@ -35,7 +38,7 @@ class HighCharts extends ActiveRecord
         $graph['tooltip'] = $this->getTooltip();
         $graph['plotOptions'] = $this->getPlotOptions();
         $graph['legend'] = $this->getLegend();
-        $graph['series'] = $this->getSeries();
+
 
         return json_encode($graph);
     }
@@ -46,7 +49,13 @@ class HighCharts extends ActiveRecord
     protected function getRawData(): array
     {
         $model = new Bp();
-        $fullData = $model->getBpData(true);
+        $data = $model->getBpData();
+
+        foreach ($data as $item) {
+            if (isset($item['datetime'])) {
+                $this->rawData[$item['datetime']] = $item;
+            }
+        }
         return $this->rawData;
     }
 
@@ -73,7 +82,9 @@ class HighCharts extends ActiveRecord
      */
     protected function getXAxis(): array
     {
-        $this->xAxis = ["categories" => ['africa', 'america', 'Asia'], 'title ' => ['text' => null]];
+
+        $this->categories = array_values($this->categories);
+        $this->xAxis = ["categories" => $this->categories, 'title ' => ['text' => null]];
         return $this->xAxis;
     }
 
@@ -98,7 +109,7 @@ class HighCharts extends ActiveRecord
      */
     protected function getTooltip(): array
     {
-        $this->tooltip = ['valueSuffix' => 'Mil'];
+        $this->tooltip = ['valueSuffix' => ''];
         return $this->tooltip;
     }
 
@@ -121,17 +132,32 @@ class HighCharts extends ActiveRecord
      */
     protected function getLegend(): array
     {
-        $this->legend = [
-            "layout" => 'vertical',
-            "align" => 'right',
-            "verticalAlign" => 'top',
-            "x" => -40,
-            "y" => 80,
-            "floating" => true,
-            "borderWidth" => 1,
-            "shadow" => true
-        ];
+        $legend = $this->getAttribute('include_legend');
+        if ($legend == 1) {
+            $this->legend = [
+                "layout" => 'horizontal',
+                "align" => 'bottom',
+                "verticalAlign" => 'bottom',
+                "x" => 0,
+                "y" => 80,
+                "floating" => true,
+                "borderWidth" => 1,
+                "shadow" => true
+            ];
+        } else {
+            $this->legend = [
+                "enabled" => false
+            ];
+        }
         return $this->legend;
+    }
+
+    private function addElements($name, &$row, $record)
+    {
+        if (isset($record[$name])) {
+            $row[] = $record[$name];
+            $this->categories[$name] = $name;
+        }
     }
 
     /**
@@ -139,18 +165,23 @@ class HighCharts extends ActiveRecord
      */
     protected function getSeries(): array
     {
-        $this->series = [
+        $seriesType = $this->getAttribute('seriesType');
+        $this->series = [];
+        foreach ($this->rawData as $id => $record) {
+            if ($seriesType == 2) {
 
-            ["name" => 'Year 1990',
-                "data" => [631, 727, 3202, 721, 26]],
-            ["name" => 'Year 2000',
-                "data" => [814, 841, 3714, 726, 31]],
-            ["name" => 'Year 2010',
-                "data" => [1044, 944, 4170, 735, 40]],
-            ["name" => 'Year 2018',
-                "data" => [1276, 1007, 4561, 746, 42]]
+            } else { // default pull everything by filter set
+                $row = [];
+                $this->addElements('SYSmmHg', $row, $record);
+                $this->addElements('DIAmmHg', $row, $record);
+                $this->addElements('Pulse', $row, $record);
+                $this->addElements('Steps', $row, $record);
+                $this->addElements('AverageKm', $row, $record);
 
-        ];
+                $this->series[] = ['name' => $id, "data" => $row];
+
+            }
+        }
 
         return $this->series;
     }
