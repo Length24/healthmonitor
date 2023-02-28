@@ -9,7 +9,8 @@
 namespace app\modules\bp\controllers;
 
 use app\models\bp\Health;
-use app\models\bp\users;
+use app\models\bp\HighCharts;
+use app\models\bp\Users;
 
 use app\models\User;
 use app\modules\bp\models\Bp;
@@ -103,8 +104,14 @@ class BpController extends Controller
 
     public function actionReporting()
     {
+        $newgraph1 = HighCharts::findOne(['id' => 1]);
+        $graph[1] = $newgraph1->getGraph();
+        $newgraph2 = HighCharts::findOne(['id' => 2]);
+        $graph[2] = $newgraph2->getGraph();
+        $newgraph3 = HighCharts::findOne(['id' => 3]);
+        $graph[3] = $newgraph3->getGraph();
 
-        return $this->createPage('/reporting', ['showfilter' => true]);
+        return $this->createPage('/reporting', ['showfilter' => true, 'graphs' => $graph]);
     }
 
     public function actionFaq()
@@ -179,7 +186,7 @@ class BpController extends Controller
     {
         $this->headerAlertMessage = "";
         $post = Yii::$app->request->post();
-        $user = users::findOne(['username' => $post['username']]);
+        $user = Users::findOne(['username' => $post['username']]);
         if ($user == false) {
             $this->headerAlertMessage = "User does not exist";
         } else {
@@ -228,7 +235,7 @@ class BpController extends Controller
                     $cookies->remove('ownerId');
 
 
-                    $signup = new users();
+                    $signup = new Users();
                     $signup->key = $this->rand_key();
                     $signup->username = $post['newusername'];
                     $signup->email = $post['newemail'];
