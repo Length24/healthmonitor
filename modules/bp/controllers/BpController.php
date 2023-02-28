@@ -9,7 +9,7 @@
 namespace app\modules\bp\controllers;
 
 use app\models\bp\Health;
-use app\models\bp\users;
+use app\models\bp\Users;
 
 use app\models\User;
 use app\modules\bp\models\Bp;
