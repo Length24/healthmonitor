@@ -27,7 +27,7 @@ class Bp extends \yii\base\Model
         $this->dataTableColumns = $dataTableColumns;
     }
 
-    public function getBpData($json = false)
+    public function getBpData($json = false, $orderby = " ORDER BY a.datetime DESC;")
     {
 
         $result = [];
@@ -49,20 +49,20 @@ class Bp extends \yii\base\Model
                         CONCAT(ro.url,"?id=",rt.id,"&del") as del, 
                         CONCAT(ro.url,"?id=",rt.id,"&edit") as edit,
                         CONCAT(date(rt.datetime), " ",TIME_FORMAT(rt.datetime, "%p")) as dateampm,
-						DATE(rt.datetime) as justdate,
+						DATE_FORMAT(rt.datetime, "%b %e") as justdate,
 						TIME_FORMAT(rt.datetime, "%p") as ampm,
-						YEARWEEK(rt.datetime) as weekNum
+						DATE_FORMAT(rt.datetime, "%v %x") as weekNum 
                         FROM bpmain.health_check rt
                         JOIN bpmain.routing ro ON ro.id = 1
                         ' . $where['sql'] . '
                         
                     ) a
-                    ' . $grouping
-                . ' ORDER BY a.datetime DESC';
+                    ' . $grouping . ' '
+                . $orderby;
 
             $result = Yii::$app->db->createCommand($sql, $where['params'])->queryAll();
         }
-
+       
         if ($json) {
             $result = array_map('array_values', $result); //datatable needs unkeyed array
             $result = json_encode($result);
@@ -105,13 +105,13 @@ class Bp extends \yii\base\Model
         $this->dataTableColumns['datetime'] = true;
 
         if (in_array($filter, [2])) {
-            $fields['datetime'] = 'a.dateampm';
+            $fields['datetime'] = 'a.dateampm as `datetime`';
         }
         if (in_array($filter, [4])) {
-            $fields['datetime'] = 'a.weekNum';
+            $fields['datetime'] = 'a.weekNum as `datetime`';
         }
         if (in_array($filter, [3, 5, 6])) {
-            $fields['datetime'] = 'a.datetime';
+            $fields['datetime'] = ' a.justdate as `datetime`';
         }
 
         $array = ['SYSmmHg' => 'sys',

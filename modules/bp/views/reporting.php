@@ -2,10 +2,6 @@
 
 use miloschuman\highcharts\Highcharts;
 
-echo "<pre>";
-
-var_Dump($graphs[1]);
-echo "</pre>";
 ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/10.3.3/highcharts.js"
         integrity="sha512-8cJ3Lf1cN3ld0jUEZy26UOg+A5YGLguP6Xi6bKLyYurrxht+xkLJ9oH9rc7pvNiYsmYuTvpe3wwS6LriK/oWDg=="

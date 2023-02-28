@@ -78,7 +78,8 @@ class BpController extends Controller
             $array = ['SYSmmHg' => 'checked', 'DIAmmHg' => 'checked', 'Pulse' => 'checked', 'Steps' => 'checked', 'AverageKm' => 'checked', 'otherInfo' => 'checked'];
         }
 
-        $array['to'] = $array['from'] = date('Y-m-d');
+        $array['to'] = date('Y-m-d');
+        $array['from'] = date('Y-m-d', strtotime('-1 week'));
         if (isset($get['fromdate'])) {
             $array['from'] = $get['fromdate'];
         }

@@ -49,13 +49,14 @@ class HighCharts extends ActiveRecord
     protected function getRawData(): array
     {
         $model = new Bp();
-        $data = $model->getBpData();
+        $data = $model->getBpData(false, 'ORDER BY a.datetime ASC');
 
         foreach ($data as $item) {
             if (isset($item['datetime'])) {
                 $this->rawData[$item['datetime']] = $item;
             }
         }
+
         return $this->rawData;
     }
 
@@ -133,16 +134,9 @@ class HighCharts extends ActiveRecord
     protected function getLegend(): array
     {
         $legend = $this->getAttribute('include_legend');
-        if ($legend == 1) {
+        if ($legend) {
             $this->legend = [
-                "layout" => 'horizontal',
-                "align" => 'bottom',
-                "verticalAlign" => 'bottom',
-                "x" => 0,
-                "y" => 80,
-                "floating" => true,
-                "borderWidth" => 1,
-                "shadow" => true
+                "enabled" => true
             ];
         } else {
             $this->legend = [
@@ -152,11 +146,13 @@ class HighCharts extends ActiveRecord
         return $this->legend;
     }
 
-    private function addElements($name, &$row, $record)
+    private function addElements($name, &$row, $record, $setCatIdToName = true)
     {
         if (isset($record[$name])) {
-            $row[] = $record[$name];
-            $this->categories[$name] = $name;
+            $row[] = (int)$record[$name];
+            if ($setCatIdToName) {
+                $this->categories[$name] = $name;
+            }
         }
     }
 
@@ -165,22 +161,44 @@ class HighCharts extends ActiveRecord
      */
     protected function getSeries(): array
     {
-        $seriesType = $this->getAttribute('seriesType');
+        $seriesType = $this->getAttribute('seriestype');
         $this->series = [];
+        $id = '';
+        $row = [];
+        $row1 = [];
+        $row2 = [];
+        $row3 = [];
+        $row4 = [];
+        $row5 = [];
         foreach ($this->rawData as $id => $record) {
-            if ($seriesType == 2) {
-
-            } else { // default pull everything by filter set
+            if ($seriesType == 2) { // nly include steps
+                $this->addElements('Steps', $row, $record, false);
+                if (isset($record['Steps'])) {
+                    $this->categories[$id] = $id;
+                }
+            } else if ($seriesType == 3) {
                 $row = [];
                 $this->addElements('SYSmmHg', $row, $record);
                 $this->addElements('DIAmmHg', $row, $record);
                 $this->addElements('Pulse', $row, $record);
-                $this->addElements('Steps', $row, $record);
-                $this->addElements('AverageKm', $row, $record);
-
                 $this->series[] = ['name' => $id, "data" => $row];
-
+            } else { // default pull everything by filter set
+                $this->addElements('SYSmmHg', $row, $record, false);
+                $this->addElements('DIAmmHg', $row1, $record, false);
+                $this->addElements('Pulse', $row2, $record, false);
+                $this->addElements('Steps', $row3, $record, false);
+                $this->addElements('AverageKm', $row4, $record, false);
+                $this->categories[$id] = $id;
             }
+        }
+        if ($seriesType == 2) { // nly include steps
+            $this->series[] = ['name' => $id, "data" => $row];
+        } else {
+            $this->series[] = ['name' => 'SYSmmHg', "data" => $row];
+            $this->series[] = ['name' => 'DIAmmHg', "data" => $row1];
+            $this->series[] = ['name' => 'Pulse', "data" => $row2];
+            $this->series[] = ['name' => 'Steps', "data" => $row3];
+            $this->series[] = ['name' => 'AverageKm', "data" => $row4];
         }
 
         return $this->series;
