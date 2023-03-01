@@ -9,7 +9,7 @@
 $theDate = $theTime = $idValue = $sysValue = $diaValue = $pulValue = $stepValue = $otherValue = '';
 if (isset($editJob)) {
 
-    $date = new \dateTime($editJob['datetime']);
+    $date = new \dateTime($editJob['datetimecheck']);
     $theDate = $date->format('Y-m-d');
     $theTime = $date->format('H:i');
     $idValue = $editJob['id'];

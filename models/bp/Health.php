@@ -18,7 +18,7 @@ class Health extends ActiveRecord
         $this->pul = $post['pul'];
         $this->step = $post['step'];
         $this->other = $post['other'];
-        $this->datetime = $post['senddaydate'] . ' ' . $post['senddaytime'];
+        $this->datetimecheck = $post['senddaydate'] . ' ' . $post['senddaytime'];
         $this->save();
     }
 }
