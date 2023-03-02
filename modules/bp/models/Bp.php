@@ -241,7 +241,7 @@ class Bp extends \yii\base\Model
             $week = $dateTime->format("W");
             $weekYear = $year . " week: " . $week;
             $date = $dateTime->format("Y-m-d");
-            $returnData[$week][$date][] = $set;
+            $returnData[$weekYear][$date][] = $set;
         }
         return $returnData;
     }
