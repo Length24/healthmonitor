@@ -232,5 +232,17 @@ class Bp extends \yii\base\Model
         return true;
     }
 
-
+    public static function makeItIntoWeeks($dataset)
+    {
+        $returnData = [];
+        foreach ($dataset as $set) {
+            $dateTime = new \DateTime($set['datetimecheck']);
+            $year = $dateTime->format("Y");
+            $week = $dateTime->format("W");
+            $weekYear = $year . " week: " . $week;
+            $date = $dateTime->format("Y-m-d");
+            $returnData[$week][$date][] = $set;
+        }
+        return $returnData;
+    }
 }

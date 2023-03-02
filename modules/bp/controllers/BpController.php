@@ -172,7 +172,7 @@ class BpController extends Controller
     private function GetData()
     {
         $dataClass = new Bp();
-        return $dataClass->getBpData();
+        return $dataClass->getBpData(false, 'ORDER BY a.orderby ASC');
     }
 
     public function actionExcel()

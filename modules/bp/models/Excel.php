@@ -33,9 +33,33 @@ class Excel extends Model
     public static function createExcel($dataSet)
     {
         $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+
+        $dataByWeek = Bp::makeItIntoWeeks($dataSet);
+
+
         $excel->getDefaultStyle()->getFont()->setName('Arial')->setSize(8);
         $sheet = $excel->getActiveSheet();
+
         $sheet->setTitle(\Yii::t('app', "title"), true);
+
+        $c = 1;
+        $r = 2;
+        $heldRow = $r;
+        foreach ($dataByWeek as $week => $Row) {
+            $sheet->setCellValue([$c, $r], $week);
+            foreach ($Row as $date => $cells) {
+                foreach ($cells as $item => $cell) {
+                    foreach ($cell as $iname => $name) {
+                        $sheet->setCellValue([$c, $r], $name);
+                        $c++;
+                    }
+                }
+
+            }
+            $r++;
+            $c = 1;
+        }
+
         $sheet->setCellValue([1, 1], 'A1');
         $sheet->setCellValue([1, 2], "2013-01-01");
         $sheet->getStyle([1, 2])->getNumberFormat()->setFormatCode('dd/mm/yyyy hh:mm');
