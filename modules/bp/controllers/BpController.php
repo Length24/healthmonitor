@@ -14,6 +14,9 @@ use app\models\bp\HighCharts;
 use app\models\bp\Users;
 
 use app\modules\bp\models\Bp;
+use app\modules\bp\models\Excel;
+use app\modules\bp\models\Pdf;
+use app\modules\bp\models\Word;
 
 use Yii;
 
@@ -165,6 +168,28 @@ class BpController extends Controller
         return $this->createPage('/profile', ['showfaq' => true]);
 
     }
+
+    private function GetData()
+    {
+        $dataClass = new Bp();
+        return $dataClass->getBpData();
+    }
+
+    public function actionExcel()
+    {
+        Excel::createExcel($this->getData());
+    }
+
+    public function actionPdf()
+    {
+        Pdf::createPDF($this->getData());
+    }
+
+    public function actionWord()
+    {
+        Word::createWord($this->getData());
+    }
+
 
     public function actionDailyupdate()
     {
