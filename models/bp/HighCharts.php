@@ -49,11 +49,11 @@ class HighCharts extends ActiveRecord
     protected function getRawData(): array
     {
         $model = new Bp();
-        $data = $model->getBpData(false, 'ORDER BY a.datetime ASC');
+        $data = $model->getBpData(false, 'ORDER BY a.orderby ASC');
 
         foreach ($data as $item) {
-            if (isset($item['datetime'])) {
-                $this->rawData[$item['datetime']] = $item;
+            if (isset($item['datetimecheck'])) {
+                $this->rawData[$item['datetimecheck']] = $item;
             }
         }
 

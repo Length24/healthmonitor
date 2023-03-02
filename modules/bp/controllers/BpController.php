@@ -9,10 +9,10 @@
 namespace app\modules\bp\controllers;
 
 use app\models\bp\Health;
+
 use app\models\bp\HighCharts;
 use app\models\bp\Users;
 
-use app\models\User;
 use app\modules\bp\models\Bp;
 
 use app\modules\bp\models\Excel;

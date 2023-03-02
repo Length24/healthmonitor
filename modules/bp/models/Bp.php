@@ -27,7 +27,7 @@ class Bp extends \yii\base\Model
         $this->dataTableColumns = $dataTableColumns;
     }
 
-    public function getBpData($json = false, $orderby = " ORDER BY a.datetime DESC;")
+    public function getBpData($json = false, $orderby = " ORDER BY a.orderby DESC;")
     {
 
         $result = [];
@@ -40,7 +40,8 @@ class Bp extends \yii\base\Model
                     FROM (
                         SELECT
                         rt.id ,
-                        rt.datetime, 
+                        rt.datetimecheck, 
+                        rt.datetimecheck as `orderby`,
                         rt.sys,
                          rt.dia, 
                          rt.pul, 
@@ -48,10 +49,10 @@ class Bp extends \yii\base\Model
                          rt.other, 
                         CONCAT(ro.url,"?id=",rt.id,"&del") as del, 
                         CONCAT(ro.url,"?id=",rt.id,"&edit") as edit,
-                        CONCAT(date(rt.datetime), " ",TIME_FORMAT(rt.datetime, "%p")) as dateampm,
-						DATE_FORMAT(rt.datetime, "%b %e") as justdate,
-						TIME_FORMAT(rt.datetime, "%p") as ampm,
-						DATE_FORMAT(rt.datetime, "%v %x") as weekNum 
+                        CONCAT(date(rt.datetimecheck), " ",TIME_FORMAT(rt.datetimecheck, "%p")) as dateampm,
+						DATE_FORMAT(rt.datetimecheck, "%b %e") as justdate,
+						TIME_FORMAT(rt.datetimecheck, "%p") as ampm,
+						DATE_FORMAT(rt.datetimecheck, "%v %x") as weekNum 
                         FROM bpmain.health_check rt
                         JOIN bpmain.routing ro ON ro.id = 1
                         ' . $where['sql'] . '
@@ -62,7 +63,7 @@ class Bp extends \yii\base\Model
 
             $result = Yii::$app->db->createCommand($sql, $where['params'])->queryAll();
         }
-       
+
         if ($json) {
             $result = array_map('array_values', $result); //datatable needs unkeyed array
             $result = json_encode($result);
@@ -101,17 +102,17 @@ class Bp extends \yii\base\Model
             $filter = $get['filter'];
         }
 
-        $fields['datetime'] = 'a.datetime';
-        $this->dataTableColumns['datetime'] = true;
+        $fields['datetimecheck'] = 'a.datetimecheck';
+        $this->dataTableColumns['datetimecheck'] = true;
 
         if (in_array($filter, [2])) {
-            $fields['datetime'] = 'a.dateampm as `datetime`';
+            $fields['datetimecheck'] = 'a.dateampm as `datetimecheck`';
         }
         if (in_array($filter, [4])) {
-            $fields['datetime'] = 'a.weekNum as `datetime`';
+            $fields['datetimecheck'] = 'a.weekNum as `datetimecheck`';
         }
         if (in_array($filter, [3, 5, 6])) {
-            $fields['datetime'] = ' a.justdate as `datetime`';
+            $fields['datetimecheck'] = ' a.justdate as `datetimecheck`';
         }
 
         $array = ['SYSmmHg' => 'sys',
@@ -185,7 +186,7 @@ class Bp extends \yii\base\Model
         if ($id !== null) {
             $get = Yii::$app->request->get();
             if (isset($get['todate']) && isset($get['fromdate'])) {
-                $where['sql'] = $where['sql'] . "AND rt.datetime BETWEEN :from AND :to ";
+                $where['sql'] = $where['sql'] . "AND rt.datetimecheck BETWEEN :from AND :to ";
                 $where['params'][':to'] = $get['todate'] . ' 23:59:59';
                 $where['params'][':from'] = $get['fromdate'] . ' 00:00:00';
             }
@@ -220,9 +221,9 @@ class Bp extends \yii\base\Model
             if ($post['senddaydate'] == "") {
                 $date = new \dateTime();
                 $thisData = $date->format('Y-m-d H-i');
-                $health->datetime = $thisData;
+                $health->datetimecheck = $thisData;
             } else {
-                $health->datetime = $post['senddaydate'] . ' ' . $post['senddaytime'];
+                $health->datetimecheck = $post['senddaydate'] . ' ' . $post['senddaytime'];
             }
             $health->save();
         } catch (Exception $e) {
