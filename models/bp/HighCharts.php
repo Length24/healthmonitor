@@ -146,7 +146,7 @@ class HighCharts extends ActiveRecord
         return $this->legend;
     }
 
-    private function addElements($name, &$row, $record, $setCatIdToName = true)
+    private function addElements($name, $row, $record, $setCatIdToName = true)
     {
         if (isset($record[$name])) {
             $row[] = (int)$record[$name];
@@ -154,6 +154,7 @@ class HighCharts extends ActiveRecord
                 $this->categories[$name] = $name;
             }
         }
+        return $row;
     }
 
     /**
@@ -165,40 +166,39 @@ class HighCharts extends ActiveRecord
         $this->series = [];
         $id = '';
         $row = [];
-        $row1 = [];
-        $row2 = [];
-        $row3 = [];
-        $row4 = [];
-        $row5 = [];
+        $rows = [];
+        $include = $this->getAttribute('data_include');
         foreach ($this->rawData as $id => $record) {
             if ($seriesType == 2) { // nly include steps
-                $this->addElements('Steps', $row, $record, false);
-                if (isset($record['Steps'])) {
-                    $this->categories[$id] = $id;
+                foreach ($include as $name) {
+                    $row = $this->addElements($name, $row, $record, false);
+                    if (isset($record[$name])) {
+                        $this->categories[$id] = $id;
+                    }
                 }
             } else if ($seriesType == 3) {
                 $row = [];
-                $this->addElements('SYSmmHg', $row, $record);
-                $this->addElements('DIAmmHg', $row, $record);
-                $this->addElements('Pulse', $row, $record);
+                foreach ($include as $name) {
+                    $row = $this->addElements($name, $row, $record);
+                }
                 $this->series[] = ['name' => $id, "data" => $row];
             } else { // default pull everything by filter set
-                $this->addElements('SYSmmHg', $row, $record, false);
-                $this->addElements('DIAmmHg', $row1, $record, false);
-                $this->addElements('Pulse', $row2, $record, false);
-                $this->addElements('Steps', $row3, $record, false);
-                $this->addElements('AverageKm', $row4, $record, false);
+                foreach ($include as $jsonId => $name) {
+                    if (!isset($rows[$jsonId])) {
+                        $rows[$jsonId] = [];
+                    }
+                    $rows[$jsonId] = $this->addElements($name, $rows[$jsonId], $record, false);
+                }
                 $this->categories[$id] = $id;
             }
         }
         if ($seriesType == 2) { // nly include steps
             $this->series[] = ['name' => $id, "data" => $row];
-        } else {
-            $this->series[] = ['name' => 'SYSmmHg', "data" => $row];
-            $this->series[] = ['name' => 'DIAmmHg', "data" => $row1];
-            $this->series[] = ['name' => 'Pulse', "data" => $row2];
-            $this->series[] = ['name' => 'Steps', "data" => $row3];
-            $this->series[] = ['name' => 'AverageKm', "data" => $row4];
+        } else if ($seriesType == 1) {
+            foreach ($include as $jsonId => $name) {
+                $this->series[] = ['name' => $name, "data" => $rows[$jsonId]];
+
+            }
         }
 
         return $this->series;
