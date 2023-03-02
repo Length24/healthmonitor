@@ -6,6 +6,7 @@ use yii\base\Model;
 
 class Word extends Model
 {
+
     public static function createWord($dataSet)
     {
         // Creating the new document...

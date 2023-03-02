@@ -18,6 +18,8 @@ use app\modules\bp\models\Excel;
 use app\modules\bp\models\Pdf;
 use app\modules\bp\models\Word;
 
+use app\modules\bp\models\Excel;
+use app\modules\bp\models\Pdf;
 use Yii;
 
 use yii\db\Exception;
@@ -189,7 +191,6 @@ class BpController extends Controller
     {
         Word::createWord($this->getData());
     }
-
 
     public function actionDailyupdate()
     {
