@@ -15,6 +15,8 @@ use app\models\bp\Users;
 
 use app\modules\bp\models\Bp;
 
+use app\modules\bp\models\Excel;
+use app\modules\bp\models\Pdf;
 use Yii;
 
 use yii\db\Exception;
@@ -164,6 +166,27 @@ class BpController extends Controller
     {
         return $this->createPage('/profile', ['showfaq' => true]);
 
+    }
+
+    private function GetData()
+    {
+        $dataClass = new Bp();
+        return $dataClass->getBpData();
+    }
+
+    public function actionExcel()
+    {
+        Excel::createExcel($this->getData());
+    }
+
+    public function actionPdf()
+    {
+        Pdf::createPDF($this->getData());
+    }
+
+    public function actionWord()
+    {
+        $this->redirect(array('/bp/bp/export'));
     }
 
     public function actionDailyupdate()
