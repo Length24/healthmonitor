@@ -14,9 +14,10 @@ use app\models\bp\HighCharts;
 use app\models\bp\Users;
 
 use app\modules\bp\models\Bp;
-
 use app\modules\bp\models\Excel;
 use app\modules\bp\models\Pdf;
+use app\modules\bp\models\Word;
+
 use Yii;
 
 use yii\db\Exception;
@@ -173,7 +174,7 @@ class BpController extends Controller
     private function GetData()
     {
         $dataClass = new Bp();
-        return $dataClass->getBpData();
+        return $dataClass->getBpData(false, 'ORDER BY a.orderby ASC');
     }
 
     public function actionExcel()
@@ -188,7 +189,7 @@ class BpController extends Controller
 
     public function actionWord()
     {
-        $this->redirect(array('/bp/bp/export'));
+        Word::createWord($this->getData());
     }
 
     public function actionDailyupdate()
