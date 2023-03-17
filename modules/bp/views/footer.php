@@ -70,18 +70,19 @@
             <hr>
         <?php } ?>
         <H1>Weekly Stats</H1>
-        <div class="col-md-12">
-            <div class="row">
-                Average Readings recorded during the week : X <br/>
-                Average SYS for the last 7 days : X <br/>
-                Average DIA for the last 7 days : X <br/>
-                Average PUL for the last 7 days : X <br/>
-                Average total steps for the last 7 Days : X <br/>
-                Average Km* walked for the last 12 days : X <br/>
-                <br/>
-                <p class="fw-lighter">*Assuming 1,400 steps to 1 km</p>
+        <?php if ($stats !== false) { ?>
+            <div class="col-md-12">
+                <div class="row">
+                    Readings Recorded during the week : <?= (int)$stats['count'] ?> <br/>
+                    Average Daily Readings: <?= (int)$stats['avgDay'] ?> <br/>
+                    Average SYS for the last 7 days : <?= (int)$stats['avgSys'] ?><br/>
+                    Average DIA for the last 7 days : <?= (int)$stats['avgDia'] ?> <br/>
+                    Average PUL for the last 7 days : <?= (int)$stats['avgPul'] ?> <br/>
+                    Average total steps for the last 7 Days : <?= (int)$stats['avgStep'] ?> <br/>
+                    <br/>
+                </div>
             </div>
-        </div>
+        <?php } ?>
     <?php } else { ?>
         <div class="col-md-12">
             <div class="row">
