@@ -27,6 +27,7 @@ use yii\web\Controller;
 class BpController extends Controller
 {
     public $controller = false;
+    public $reportFilters = [1 => "All Data", 2 => 'Average AM and PM', 3 => 'Average Daily', 4 => 'Average Weekly', 5 => 'Highest Daily', 6 => 'Lowest Daily'];
     private $headerAlertMessage = '';
 
     public function beforeAction($action)
@@ -60,7 +61,7 @@ class BpController extends Controller
         $health = Health::getWeekStats();
 
         $header = $this->render('/header', ["message" => $this->headerAlertMessage, "params" => $pageParams, "username" => $username, 'hostPage' => $hostPage]);
-        $footer = $this->render('/footer', ["params" => $pageParams, "username" => $username, 'footerParams' => $this->getFooterParams(), 'stats' => $health]);
+        $footer = $this->render('/footer', ["params" => $pageParams, "username" => $username, 'footerParams' => $this->getFooterParams(), 'controller' => $this, 'stats' => $health]);
 
         return $header . $this->render($page, $pageParams) . $footer;
     }
@@ -105,7 +106,7 @@ class BpController extends Controller
 
     public function actionExports()
     {
-        return $this->createPage('/exports', ['showfilter' => true]);
+        return $this->createPage('/exports', ['showfilter' => true, 'filters' => $this->reportFilters]);
     }
 
     public function actionReporting()
@@ -184,12 +185,14 @@ class BpController extends Controller
 
     public function actionPdf()
     {
-        Pdf::createPDF($this->getData());
+        $pdf = new Pdf();
+        $pdf->createObject($this->getData());
     }
 
     public function actionWord()
     {
-        Word::createWord($this->getData());
+        $word = new Word();
+        $word->createObject($this->getData());
     }
 
     public function actionDailyupdate()

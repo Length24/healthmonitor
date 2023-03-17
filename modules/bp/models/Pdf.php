@@ -2,29 +2,33 @@
 
 namespace app\modules\bp\models;
 
+use app\models\CreateFile;
 use yii\base\Model;
 
-class Pdf extends Model
+class Pdf extends Word
 {
-    public static function createPDF($dataSet)
+    public function OutPutDocument($object)
     {
+        include_once '../vendor/tecnickcom/tcpdf/tcpdf.php';
+        \PhpOffice\PhpWord\Settings::setPdfRendererPath('../vendor/tecnickcom/tcpdf');
+        \PhpOffice\PhpWord\Settings::setPdfRendererName('TCPDF');
 
-        $pdf = new \TCPDF;
-        $pdf->AddPage();
-        $pageDimensions = $pdf->getPageDimensions();
-        $pageWidth = $pageDimensions['wk'];
-        $pageHeight = $pageDimensions['hk'];
+        $fileName = 'Bp_PDF_ Export_' . date('Y-m-d') . "_" . time() . ".pdf";
+        $file = CreateFile::getFilePath($fileName);
 
-        $pdf->SetFont('FreeSans', '', 12);
-        $pdf->Cell($pageWidth - 20, 6, "Health Monitor");
-        $pdf->SetXY(35, 12);
-        $pdf->SetLineWidth(0.2);
-        $pdf->RoundedRect(20, 70, $pageWidth - 60, 21, 3.50, '1111', 'DF');
-        $pdf->WriteHTML("<h1>Bo</h1>", 34, false, true);
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($object, 'PDF');
+        $objWriter->save($file);
 
-        $temp = tmpfile();
-        $tempFilePath = stream_get_meta_data($temp)['uri'];
-        $pdf->Output($tempFilePath, 'I');
+        header("Content-Length: " . filesize($file));
+        header("Content-type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+        header("Content-Disposition: attachment;Filename=" . $fileName);
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Pragma: public');
 
+        readfile($file);
+        unlink($file);
+
+        return $file;
     }
 }

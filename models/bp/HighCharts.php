@@ -2,6 +2,7 @@
 
 namespace app\models\bp;
 
+use app\models\CreateFile;
 use app\modules\bp\models\Bp;
 use yii\base\BaseObject;
 use yii\db\ActiveRecord;
@@ -96,7 +97,7 @@ class HighCharts extends ActiveRecord
     {
         $this->yAxis = [
             "min" => 0, "title" => [
-                "text" => 'Population (millions)',
+                "text" => \Yii::$app->params['webAddress'],
                 "align" => 'high'
             ],
             "labels" => [
@@ -202,6 +203,32 @@ class HighCharts extends ActiveRecord
         }
 
         return $this->series;
+    }
+
+    public function exportModule($graph)
+    {
+        $dataString = ('type=image/jpeg&width=800&options=' . $graph);
+        $url = 'https://export.highcharts.com/?';
+        $ch = curl_init();
+
+        $file = CreateFile::createFile(rand(1, 100000) . time() . ".jpg");
+        $img = $file['path'];
+        $fp = $file['fp'];
+
+        $headers = array();
+        $headers[] = "Accept: application/json";
+        $headers[] = "Content-Type: application/x-www-form-urlencoded";
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+        curl_setopt($ch, CURLOPT_POST, 1);
+
+        $result = curl_exec($ch);
+
+        fwrite($fp, $result);
+        fclose($fp);
+        return $img;
     }
 
 

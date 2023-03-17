@@ -2,74 +2,191 @@
 
 namespace app\modules\bp\models;
 
+use app\models\bp\HighCharts;
+use app\models\CreateFile;
 use yii\base\Model;
+use yii;
 
 class Word extends Model
 {
 
-    public static function createWord($dataSet)
+    public function createObject($dataSet)
     {
+        CreateFile::clearTempFolder(); //clear the temp folder on start
+        $graph1 = HighCharts::findOne(['id' => 1]);
+        $graph = $graph1->getGraph();
+        $img1 = $graph1->exportModule($graph);
+
+        $graph2 = HighCharts::findOne(['id' => 2]);
+        $graph = $graph2->getGraph();
+        $img2 = $graph2->exportModule($graph);
+
         // Creating the new document...
         $phpWord = new \PhpOffice\PhpWord\PhpWord();
 
-        /* Note: any element you append to a document must reside inside of a Section. */
+        $section = $phpWord->addSection(['marginLeft' => 600, 'marginRight' => 600,
+            'marginTop' => 600, 'marginBottom' => 600]);
 
-// Adding an empty Section to the document...
-        $section = $phpWord->addSection();
-// Adding Text element to the Section having font styled by default...
+
         $section->addText(
-            '"Learn from yesterday, live for today, hope for tomorrow. '
-            . 'The important thing is not to stop questioning." '
-            . '(Albert Einstein)'
+            'Blood Pressure Report',
+            ['name' => 'Tahoma', 'size' => 26, 'bold' => true]
         );
 
-        /*
-         * Note: it's possible to customize font style of the Text element you add in three ways:
-         * - inline;
-         * - using named font style (new font style object will be implicitly created);
-         * - using explicitly created font style object.
-         */
-
-// Adding Text element with font customized inline...
         $section->addText(
-            '"Great achievement is usually born of great sacrifice, '
-            . 'and is never the result of selfishness." '
-            . '(Napoleon Hill)',
-            array('name' => 'Tahoma', 'size' => 10)
+            'Date Downloaded: ' . date('Y-m-d'),
+            ['name' => 'Tahoma', 'size' => 12, 'bold' => true]
         );
 
-// Adding Text element with font customized using named font style...
-        $fontStyleName = 'oneUserDefinedStyle';
-        $phpWord->addFontStyle(
-            $fontStyleName,
-            array('name' => 'Tahoma', 'size' => 10, 'color' => '1B2232', 'bold' => true)
-        );
+        $get = Yii::$app->request->get();
+
+        if (empty($get)) {
+            $section->addText(
+                'No Date Filters Set',
+                ['name' => 'Tahoma', 'size' => 14, 'bold' => false]
+            );
+        } else {
+            if (isset($get['fromdate']) && isset($get['todate'])) {
+                $section->addText(
+                    'Date Range ' . $get['fromdate'] . " to " . $get['todate'],
+                    ['name' => 'Tahoma', 'size' => 12, 'bold' => false]
+                );
+            }
+        }
+
+
         $section->addText(
-            '"The greatest accomplishment is not in never falling, '
-            . 'but in rising again after you fall." '
-            . '(Vince Lombardi)',
-            $fontStyleName
+            'Produced using Bp-Monitor.org.uk',
+            ['name' => 'Tahoma', 'size' => 8, 'bold' => false]
         );
 
-// Adding Text element with font customized using explicitly created font style object...
-        $fontStyle = new \PhpOffice\PhpWord\Style\Font();
-        $fontStyle->setBold(true);
-        $fontStyle->setName('Tahoma');
-        $fontStyle->setSize(13);
-        $myTextElement = $section->addText('"Believe you can and you\'re halfway there." (Theodor Roosevelt)');
-        $myTextElement->setFontStyle($fontStyle);
+        $section->addImage($img1, ['positioning' => 'relative', 'width' => 260, 'height' => 200, 'wrappingStyle' => 'tight']);
+        $section->addImage($img2, ['positioning' => 'relative', 'width' => 260, 'height' => 200, 'wrappingStyle' => 'tight']);
+        $section->addText('
+        
+        ');
 
-// Saving the document as OOXML file...
+        $model = new Bp();
+        $fullData = $model->getBpData(false, " ORDER BY a.orderby ASC;");
+
+        if (!empty($fullData)) {
+
+            $table = $section->addTable([
+                'borderSize' => 12,
+                'borderColor' => '000000',
+                'afterSpacing' => 0,
+                'Spacing' => 0,
+                'cellMargin' => 0
+            ]);
+            $colSize = 11520;  #1440 twips = 1in ,  8 and a bit inches to a page
 
 
-        $filename = "Health_Checker_Report" . "_" . date('Y-m-d') . "_" . time() . ".docx";
-        header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessing‌​ml.document");// you should look for the real header that you need if it's not Word 2007!!!
-        header('Content-Disposition: attachment; filename=' . $filename);
+            $firstRow = true;
+            foreach ($fullData as $col) {
+                if (isset($col['edit'])) {
+                    unset($col['edit']);
+                }
+                if (isset($col['del'])) {
+                    unset($col['del']);
+                }
 
-        $h2d_file_uri = tempnam("", "htd");
-        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
-        $objWriter->save("php://output");// this would output it like echo, but in combination with header: it will be sent
-        exit;
+                #datetimecheck
+                $colNum = count($col);
 
+                if (isset($col['otherInfo'])) {
+                    if ($colNum > 1) {
+                        $colSize = $colSize / 2;
+                        $colNum--;
+                        $InfoSize = $colSize;
+                    }
+                }
+
+                if (isset($col['datetimecheck'])) {
+                    $colNum++; #Datatimecheck double Size
+                }
+
+                if ($colNum > 0) {
+                    $normalSize = $colSize / $colNum;
+                } else {
+                    $normalSize = $colSize;
+                }
+
+                #Add a header Row
+                if ($firstRow) {
+                    $firstRow = false;
+                    $table->addRow();
+                    $headers = array_keys($col);
+                    foreach ($headers as $id) {
+                        if ($id == 'otherInfo') {
+                            $cellSize = $InfoSize;
+                        }
+                        if ($id == 'datetimecheck') {
+                            $cellSize = $normalSize * 2;
+                        }
+                        $table->addCell($cellSize, ['borderSize' => 6])->addText($id, [
+                            'name' => 'Arial',
+                            'size' => '12',
+                            'color' => '000000',
+                            'bold' => true,
+                            'italic' => false
+                        ]);
+                    }
+                }
+
+                $table->addRow();
+                foreach ($col as $id => $cell) {
+                    $cellSize = $normalSize;
+                    if (is_null($cell)) {
+                        $cell = " ";
+                    }
+
+                    if ($id == 'otherInfo') {
+                        $cellSize = $InfoSize;
+                        $cell = str_replace(',', '', $cell);
+                        $cell = trim($cell);
+                    }
+                    if ($id == 'datetimecheck') {
+                        $cellSize = $normalSize * 2;
+                    }
+                    if ($id !== 'otherInfo' && $id !== 'datetimecheck') {
+                        $cell = (int)$cell;
+                    }
+
+                    $table->addCell($cellSize, ['borderSize' => 6])->addText($cell, [
+                        'name' => 'Arial',
+                        'size' => '10',
+                        'color' => '000000',
+                        'bold' => false,
+                        'italic' => false
+                    ]);
+                }
+            }
+        }
+
+        $this->OutPutDocument($phpWord);
     }
+
+    public function OutPutDocument($object)
+    {
+        $filename = 'Bp_Export_' . date('Y-m-d') . "_" . time() . ".docx";
+        $file = CreateFile::getFilePath($filename);
+
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($object, 'Word2007');
+        $objWriter->save($file);
+
+
+        header("Content-Length: " . filesize($file));
+        header("Content-type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+        header("Content-Disposition: attachment;Filename=" . $filename);
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Pragma: public');
+
+        readfile($file);
+        unlink($file);
+
+        return $file;
+    }
+
+
 }
