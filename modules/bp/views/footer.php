@@ -17,12 +17,12 @@
                         <div class="mb-3 col-xs-12 col-md-12">
                             <label for="filter">Select Report-type:</label>
                             <select id="filter" name="filter">
-                                <option value="1" <?= $footerParams['type1'] ?>>All Data</option>
-                                <option value="2" <?= $footerParams['type2'] ?>>Average AM and PM</option>
-                                <option value="3" <?= $footerParams['type3'] ?>>Average Daily</option>
-                                <option value="4" <?= $footerParams['type4'] ?>>Average Weekly</option>
-                                <option value="5" <?= $footerParams['type5'] ?>>Highest Daily</option>
-                                <option value="6" <?= $footerParams['type6'] ?>>Lowest Daily</option>
+                                <option value="1" <?= $footerParams['type1'] ?>><?= $controller->reportFilters[1] ?></option>
+                                <option value="2" <?= $footerParams['type2'] ?>><?= $controller->reportFilters[2] ?></option>
+                                <option value="3" <?= $footerParams['type3'] ?>><?= $controller->reportFilters[3] ?></option>
+                                <option value="4" <?= $footerParams['type4'] ?>><?= $controller->reportFilters[4] ?></option>
+                                <option value="5" <?= $footerParams['type5'] ?>><?= $controller->reportFilters[5] ?></option>
+                                <option value="6" <?= $footerParams['type6'] ?>><?= $controller->reportFilters[6] ?></option>
                             </select>
                         </div>
                         <div class="mb-3 col-xs-12 col-md-12">
