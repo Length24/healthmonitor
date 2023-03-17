@@ -58,8 +58,10 @@ class BpController extends Controller
             $username = $cookies['user']->value;
         }
 
+        $health = Health::getWeekStats();
+
         $header = $this->render('/header', ["message" => $this->headerAlertMessage, "params" => $pageParams, "username" => $username, 'hostPage' => $hostPage]);
-        $footer = $this->render('/footer', ["params" => $pageParams, "username" => $username, 'footerParams' => $this->getFooterParams(), 'controller' => $this]);
+        $footer = $this->render('/footer', ["params" => $pageParams, "username" => $username, 'footerParams' => $this->getFooterParams(), 'controller' => $this, 'stats' => $health]);
 
         return $header . $this->render($page, $pageParams) . $footer;
     }

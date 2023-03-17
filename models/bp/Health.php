@@ -3,6 +3,7 @@
 namespace app\models\bp;
 
 use yii\db\ActiveRecord;
+use yii;
 
 class Health extends ActiveRecord
 {
@@ -20,5 +21,19 @@ class Health extends ActiveRecord
         $this->other = $post['other'];
         $this->datetimecheck = $post['senddaydate'] . ' ' . $post['senddaytime'];
         $this->save();
+    }
+
+    public static function getWeekStats()
+    {
+        $sql = "SELECT AVG(hc.step) as avgStep, AVG(hc.sys) as avgSys, AVG(hc.dia) as avgDia, AVG(hc.pul) as avgPul, COUNT(hc.id) as count , COUNT(hc.id) / 7 as avgDay
+                    FROM bpmain.health_check hc
+                    WHERE hc.datetimecheck >= DATE(NOW() - INTERVAL 7 DAY)
+                    ";
+
+        $result = Yii::$app->db->createCommand($sql)->queryAll();
+        if (is_array($result)) {
+            return reset($result);
+        }
+        return false;
     }
 }
