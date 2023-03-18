@@ -67,7 +67,7 @@ class Word extends Model
         ');
 
         $model = new Bp();
-        $fullData = $model->getBpData(false, " ORDER BY a.orderby ASC;");
+        $fullData = $model->getBpData(false, " ORDER BY max(a.orderby) ASC;");
 
         if (!empty($fullData)) {
 
