@@ -7,11 +7,12 @@ use app\models\CreateFile;
 use yii\base\Model;
 use yii;
 
-class Word extends Model
+class Word extends ExportModels
 {
 
     public function createObject($dataSet)
     {
+
         CreateFile::clearTempFolder(); //clear the temp folder on start
         $graph1 = HighCharts::findOne(['id' => 1]);
         $graph = $graph1->getGraph();
@@ -42,13 +43,19 @@ class Word extends Model
 
         if (empty($get)) {
             $section->addText(
-                'No Date Filters Set',
+                'No Date Filters Set, all date returned',
                 ['name' => 'Tahoma', 'size' => 14, 'bold' => false]
             );
         } else {
             if (isset($get['fromdate']) && isset($get['todate'])) {
                 $section->addText(
                     'Date Range ' . $get['fromdate'] . " to " . $get['todate'],
+                    ['name' => 'Tahoma', 'size' => 12, 'bold' => false]
+                );
+            }
+            if (isset($get['filter'])) {
+                $section->addText(
+                    'ReportType: ' . $this->reportFilters[$get['filter']],
                     ['name' => 'Tahoma', 'size' => 12, 'bold' => false]
                 );
             }

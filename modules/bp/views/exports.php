@@ -53,11 +53,11 @@ $getUrl = http_build_query($get);
     <div class="col-md-4 p-4 border border-3 rounded" style="text-align: center">
         <h3> Download Spreadsheet Data</h3>
 
-        <a href="/bp/bp/excel<?= $getUrl ?>"><i class="fa fa-table fa-5x" aria-hidden="true"></i></a>
+        <a href="/bp/bp/excel?<?= $getUrl ?>"><i class="fa fa-table fa-5x" aria-hidden="true"></i></a>
     </div>
     <div class="col-md-4 p-4 border border-3 rounded" style="text-align: center">
         <h3> Download Formatted PDF</h3>
-        <a href="/bp/bp/pdf<?= $getUrl ?>"><i class="fa fa-file-pdf-o fa-5x" aria-hidden="true"></i></a>
+        <a href="/bp/bp/pdf?<?= $getUrl ?>"><i class="fa fa-file-pdf-o fa-5x" aria-hidden="true"></i></a>
     </div>
     <div class="col-md-4 p-4 border border-3 rounded" style="text-align: center">
         <h3> Download Word Document</h3>
