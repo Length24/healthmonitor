@@ -5,7 +5,7 @@ namespace app\modules\bp\models;
 use yii\base\Model;
 use Yii;
 
-class Excel extends Model
+class Excel extends ExportModels
 {
     public array $dataSet = [];
     protected $titleHeaderStyleArray = [

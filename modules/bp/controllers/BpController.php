@@ -183,16 +183,22 @@ class BpController extends Controller
         Excel::createExcel($this->getData());
     }
 
+    private function getObject($object)
+    {
+        $object->setReportFilters($this->reportFilters);
+        $object->createObject($this->getData());
+    }
+
     public function actionPdf()
     {
         $pdf = new Pdf();
-        $pdf->createObject($this->getData());
+        $this->getObject($pdf);
     }
 
     public function actionWord()
     {
         $word = new Word();
-        $word->createObject($this->getData());
+        $this->getObject($word);
     }
 
     public function actionDailyupdate()

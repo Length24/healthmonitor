@@ -9,10 +9,10 @@ class Pdf extends Word
 {
     public function OutPutDocument($object)
     {
+
         include_once '../vendor/tecnickcom/tcpdf/tcpdf.php';
         \PhpOffice\PhpWord\Settings::setPdfRendererPath('../vendor/tecnickcom/tcpdf');
         \PhpOffice\PhpWord\Settings::setPdfRendererName('TCPDF');
-
         $fileName = 'Bp_PDF_ Export_' . date('Y-m-d') . "_" . time() . ".pdf";
         $file = CreateFile::getFilePath($fileName);
 
