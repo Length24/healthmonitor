@@ -27,7 +27,7 @@ class Bp extends \yii\base\Model
         $this->dataTableColumns = $dataTableColumns;
     }
 
-    public function getBpData($json = false, $orderby = " ORDER BY a.orderby DESC;")
+    public function getBpData($json = false, $orderby = " ORDER BY max(a.orderby) DESC;")
     {
 
         $result = [];
@@ -74,7 +74,7 @@ class Bp extends \yii\base\Model
     private function getGrouping()
     {
         $get = Yii::$app->request->get();
-        $grouping = '';
+        $grouping = 'GROUP BY a.id';
         if (isset($get['filter'])) {
             $filter = $get['filter'];
             if ($filter == 2) {

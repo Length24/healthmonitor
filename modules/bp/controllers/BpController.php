@@ -175,7 +175,7 @@ class BpController extends Controller
     private function GetData()
     {
         $dataClass = new Bp();
-        return $dataClass->getBpData(false, 'ORDER BY a.orderby ASC');
+        return $dataClass->getBpData(false, 'ORDER BY max(a.orderby) ASC');
     }
 
     public function actionExcel()
