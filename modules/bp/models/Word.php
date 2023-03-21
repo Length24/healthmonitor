@@ -9,14 +9,9 @@ use yii;
 
 class Word extends ExportModels
 {
-    protected $class = "Word";
 
     public function createObject($dataSet)
     {
-        $tableColor = false;
-        if (get_class($this) == 'app\modules\bp\models\Word') {
-            $tableColor = true;
-        }
 
         CreateFile::clearTempFolder(); //clear the temp folder on start
         $graph1 = HighCharts::findOne(['id' => 1]);
@@ -94,7 +89,6 @@ class Word extends ExportModels
 
 
             $firstRow = true;
-            $colorRow = 0;
             foreach ($fullData as $col) {
                 if (isset($col['edit'])) {
                     unset($col['edit']);
@@ -135,29 +129,16 @@ class Word extends ExportModels
                         }
                         if ($id == 'datetimecheck') {
                             $cellSize = $normalSize * 2;
-                            $id = "Date/Time/Week";
                         }
-
-                        if ($tableColor) {
-                            $tablecell = $table->addCell($cellSize, ['borderSize' => 6,
-                                'bgcolor' => '#000000',
-                            ]);
-                        } else {
-                            $tablecell = $table->addCell($cellSize, ['borderSize' => 6]);
-                        }
-
-                        $tablecell->addText($id, [
+                        $table->addCell($cellSize, ['borderSize' => 6])->addText($id, [
                             'name' => 'Arial',
-                            'size' => '10',
-                            'color' => '#FFFFFF',
+                            'size' => '12',
+                            'color' => '000000',
                             'bold' => true,
                             'italic' => false
-                        ], [
-                            'align' => 'center',
                         ]);
                     }
                 }
-
 
                 $table->addRow();
                 foreach ($col as $id => $cell) {
@@ -173,39 +154,18 @@ class Word extends ExportModels
                     }
                     if ($id == 'datetimecheck') {
                         $cellSize = $normalSize * 2;
-
                     }
                     if ($id !== 'otherInfo' && $id !== 'datetimecheck') {
                         $cell = (int)$cell;
                     }
 
-                    $rowColor = "#EAF2F8";
-                    if ($colorRow == 1) {
-                        $rowColor = "#D6EAF8";
-                    }
-
-                    if ($tableColor) {
-                        $tableCell = $table->addCell($cellSize, [
-                            'borderSize' => 6,
-                            'bgcolor' => $rowColor,
-                        ]);
-                    } else {
-                        $tableCell = $table->addCell($cellSize, ['borderSize' => 6]);
-                    }
-
-                    $tableCell->addText($cell, [
+                    $table->addCell($cellSize, ['borderSize' => 6])->addText($cell, [
                         'name' => 'Arial',
                         'size' => '10',
                         'color' => '000000',
                         'bold' => false,
                         'italic' => false
                     ]);
-
-                }
-                if ($colorRow == 1) {
-                    $colorRow = 0;
-                } else {
-                    $colorRow = 1;
                 }
             }
         }

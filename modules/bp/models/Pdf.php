@@ -9,11 +9,6 @@ class Pdf extends Word
 {
     public function OutPutDocument($object)
     {
-        // Yes its wrong, but PHPWORD broke
-        // https://github.com/map-os/PHPWord/commit/798b379acabd614ad260ddeb287f79e1706de1a8
-        // would fix it, but would require amending a vendor file, which would break a future fix being added.
-        // so better to supress the error in this function for now.
-        error_reporting(E_ALL ^ E_DEPRECATED);
 
         include_once '../vendor/tecnickcom/tcpdf/tcpdf.php';
         \PhpOffice\PhpWord\Settings::setPdfRendererPath('../vendor/tecnickcom/tcpdf');
