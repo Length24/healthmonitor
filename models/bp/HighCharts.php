@@ -6,6 +6,7 @@ use app\models\CreateFile;
 use app\modules\bp\models\Bp;
 use yii\base\BaseObject;
 use yii\db\ActiveRecord;
+use function PHPUnit\Framework\isEmpty;
 
 class HighCharts extends ActiveRecord
 {
@@ -30,16 +31,18 @@ class HighCharts extends ActiveRecord
     public function getGraph()
     {
         $this->getRawData();
-        $graph = [];
-        $graph['series'] = $this->getSeries();
-        $graph['chart'] = $this->getGraphtype();
-        $graph['title'] = $this->getGraphtitle();
-        $graph['xAxis'] = $this->getXAxis();
-        $graph['yAxis'] = $this->getYAxis();
-        $graph['tooltip'] = $this->getTooltip();
-        $graph['plotOptions'] = $this->getPlotOptions();
-        $graph['legend'] = $this->getLegend();
 
+        $graph = [];
+        if (!empty($this->rawData)) {
+            $graph['series'] = $this->getSeries();
+            $graph['chart'] = $this->getGraphtype();
+            $graph['title'] = $this->getGraphtitle();
+            $graph['xAxis'] = $this->getXAxis();
+            $graph['yAxis'] = $this->getYAxis();
+            $graph['tooltip'] = $this->getTooltip();
+            $graph['plotOptions'] = $this->getPlotOptions();
+            $graph['legend'] = $this->getLegend();
+        }
 
         return json_encode($graph);
     }
