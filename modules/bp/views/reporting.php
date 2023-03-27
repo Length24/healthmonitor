@@ -26,14 +26,28 @@ use miloschuman\highcharts\Highcharts;
 </div>
 
 <script type="text/javascript">
+    <?php
+    $noEntries = true;
+
+    for ($x = 1; $x <= 3; $x++) {
+        if($graphs[$x] !== "[]") {
+        $noEntries = false;
+    ?>
+
     $(function () {
-        $('#graphcontainer_1').highcharts(<?=$graphs[1]?>);
+        $('#graphcontainer_<?=$x?>').highcharts(<?=$graphs[$x]?>);
     });
-    $(function () {
-        $('#graphcontainer_2').highcharts(<?=$graphs[2]?>);
-    });
-    $(function () {
-        $('#graphcontainer_3').highcharts(<?=$graphs[3]?>);
-    });
+
+    <?php }
+    }
+
+
+    ?>
+
 </script>
+<?php if ($noEntries) { ?>
+    <h2 style = "text-align: center"> No Readings have yet been recorded, so reporting is impossible</h2>
+    <h3 style = "text-align: center">Please add some readings on the new health information page to see data reporting</h3>
+
+<?php } ?>
 

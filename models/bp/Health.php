@@ -25,12 +25,19 @@ class Health extends ActiveRecord
 
     public static function getWeekStats()
     {
+
+        $cookies = Yii::$app->request->cookies;
+        $id = null;
+        if (isset($cookies['id'])) {
+            $id = $cookies['id']->value;
+        }
+
         $sql = "SELECT AVG(hc.step) as avgStep, AVG(hc.sys) as avgSys, AVG(hc.dia) as avgDia, AVG(hc.pul) as avgPul, COUNT(hc.id) as count , COUNT(hc.id) / 7 as avgDay
                     FROM bpmain.health_check hc
-                    WHERE hc.datetimecheck >= DATE(NOW() - INTERVAL 7 DAY)
+                    WHERE hc.datetimecheck >= DATE(NOW() - INTERVAL 7 DAY) AND hc.userid = :user
                     ";
 
-        $result = Yii::$app->db->createCommand($sql)->queryAll();
+        $result = Yii::$app->db->createCommand($sql, [':user' => $id])->queryAll();
         if (is_array($result)) {
             return reset($result);
         }
