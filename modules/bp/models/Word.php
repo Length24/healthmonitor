@@ -193,6 +193,8 @@ class Word extends ExportModels
                         $tableCell = $table->addCell($cellSize, ['borderSize' => 6]);
                     }
 
+                    $cell = str_replace("<br />", '<w:br/>', $cell );
+
                     $tableCell->addText($cell, [
                         'name' => 'Arial',
                         'size' => '10',
